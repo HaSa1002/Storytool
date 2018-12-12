@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Quelldateien\imgui">
+      <UniqueIdentifier>{5c970ebe-adb2-492d-a411-009919b4a016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\imgui">
+      <UniqueIdentifier>{f9ee38fe-5bf3-47b5-ad28-183a7c0cc8ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\global vars">
+      <UniqueIdentifier>{1410b0e6-14e0-4524-a9e3-01f9ab8caa90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\graph">
+      <UniqueIdentifier>{444297fd-327e-4dba-a4d9-342b6a8c4ebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\nodes">
+      <UniqueIdentifier>{fe892302-7b80-49f0-bc49-3b3f2f36e880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\actions">
+      <UniqueIdentifier>{b07b1316-b12b-4205-8227-e53955e2690a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\character">
+      <UniqueIdentifier>{84813e0c-585c-4999-acaf-616e2bf89cbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\ST Script">
+      <UniqueIdentifier>{21a4fdc2-9ef9-40bf-95e4-6182011bb780}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_stdlib.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui-SFML.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionSet.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Project.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig-SFML.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_stdlib.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui-SFML.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.hpp">
+      <Filter>Headerdateien\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>Headerdateien\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Action.hpp">
+      <Filter>Headerdateien\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionSet.hpp">
+      <Filter>Headerdateien\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeSet.hpp">
+      <Filter>Headerdateien\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.hpp">
+      <Filter>Headerdateien\character</Filter>
+    </ClInclude>
+    <ClInclude Include="Project.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser.hpp">
+      <Filter>Headerdateien\ST Script</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
