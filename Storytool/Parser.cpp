@@ -12,7 +12,7 @@ namespace st {
 		}
 
 		bool isNumeric(const std::string& input) {
-			return input.find_first_not_of("0123456789.-") == std::string::npos;
+			return input.find_first_not_of("0123456789.- ") == std::string::npos;
 		}
 
 		//Returns in left ends (first), right starts (second) manner splitted by the first operator found (operator is gap between first and second);
@@ -49,6 +49,7 @@ namespace st {
 			clearWhiteSpace(var);
 			if (var[0] == ':') {
 				//It's a global
+				var = var.substr(1);
 
 				if (globals.find(var) == globals.end()) {
 					std::string message { "Global '" + var };
@@ -194,12 +195,13 @@ namespace st {
 			size_t p = s.find_first_of("+-*/");
 			if (p != std::string::npos) {
 				if (s[p + 1] != '=') throw std::invalid_argument("Didn't found required '='."); //TODO: Write better err msg
-				std::string temp { s.substr(p + 2) };
+				std::string temp { s.substr(p + 2, s.find_first_of(';') - p - 2) };
 				std::string var { getVariableName(s.substr(0, p)) };
 				double res = calculateMath(temp, globals, locals);
 				if (var[0] == ':') {
 					//Global
-					if (globals.find(var.substr(1)) == globals.end())
+					var = var.substr(1);
+					if (globals.find(var) == globals.end())
 						throw std::invalid_argument("Global () doesn't exist. Create it first in the Globals Window and then recompile the script!");
 
 					switch (s[p]) {
@@ -238,6 +240,7 @@ namespace st {
 			} else {
 				//Check for normal assign operator (=)
 				p = s.find_first_of('=');
+				if (p == std::string::npos) return; //TODO: Make more elegant
 				std::string var { getVariableName(s.substr(0, p)) };
 				std::string temp { s.substr(p + 1) };
 				double res = calculateMath(temp, globals, locals);
@@ -245,8 +248,8 @@ namespace st {
 					//Global (Have to cut out ':')
 					if (globals.find(var.substr(1)) == globals.end())
 						throw std::invalid_argument("Global () doesn't exist. Create it first in the Globals Window and then recompile the script!");
-
-					globals[var.substr(1)] = res;
+					else
+						globals[var.substr(1)] = res;
 				} else {
 					//Local
 					locals.insert_or_assign(var, res);
@@ -267,7 +270,7 @@ namespace st {
 				//Check for keywords (return, if, else, {, }
 				//1. Check for return _;
 				if (executing.substr(0, 6) == "return") {
-					std::string temp { executing.substr(6) };
+					std::string temp { executing.substr(6, executing.find_first_of(';', 6) - 6) };
 					return calculateMath(temp, globals, vars) != 0;
 				}
 
@@ -282,13 +285,15 @@ namespace st {
 					if (res.first == std::string::npos) {
 						//Special case: Just bool check
 						//CalculateMath will return always something if there was something
-						if (calculateMath(executing, globals, vars) != 0) result = true;
+						std::string temp { executing.substr(2) };
+						double res = calculateMath(temp, globals, vars);
+						if (res != 0.0) result = true;
 
 
 
 					} else {
 						//We have to Compare
-						std::string lefts { executing.substr(0, res.first) };
+						std::string lefts { executing.substr(2, res.first) };
 						std::string rights { executing.substr(res.second) };
 						double left = calculateMath(lefts, globals, vars);
 						double right = calculateMath(rights, globals, vars);
@@ -297,13 +302,17 @@ namespace st {
 							case '<':
 								if (executing[res.first + 2] == '=') result = left <= right;
 								else result = left < right;
+								break;
 							case '>':
 								if (executing[res.first + 2] == '=') result = left >= right;
 								else result = left > right;
+								break;
 							case '~':
 								result = left != right;
+								break;
 							case '=':
 								result = left == right;
+								break;
 							default:
 								throw std::invalid_argument("Comparison failed! Not a operator: " + executing[res.first + 1]);
 						}
@@ -314,12 +323,16 @@ namespace st {
 						af::getline(script, executing, true, "}");
 						std::string elseBlock;
 						af::getline(script, elseBlock, true, "}");
+						script = executing + script; //TODO: Make this hack nicer
+						executing.clear();
 						code.pop();
 						continue;
 
 					} else {
 						//We have to skip the block
 						af::getline(script, executing, true, "}");
+						executing.clear();
+						af::getline(script, executing, true, "{");
 						//Check for else then return to normal buisness
 						clearWhiteSpace(executing);
 						if (executing.substr(0, 4) == "else") {
