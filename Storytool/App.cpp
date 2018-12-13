@@ -194,7 +194,29 @@ namespace st {
 
 	void App::drawGlobalsWindow() {
 		if (ImGui::Begin("Global variables"), &window_states["globalvars"]) {
+			static std::string name;
+			static double value = 0;
+			ImGui::InputText("Name", &name, ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsNoBlank);
 			
+			ImGui::InputDouble("Value", &value, 0.1,1);
+			
+			if (ImGui::Button("Add")) {
+				if (name != "")
+					global_vars.insert_or_assign(name, value);
+				name.clear();
+				value = 0;
+			}
+			ImGui::TreePush("vars");
+			for (auto& i : global_vars) {
+				if (ImGui::TreeNode(i.first.data())) {
+					ImGui::InputDouble("Value", &i.second);
+					//FIXME: Seperate Init Value and Current value (if in sim)
+					//TODO: Add Delete
+
+				ImGui::TreePop();
+				}
+			}
+			ImGui::TreePop();
 		}
 		ImGui::End();
 	}
