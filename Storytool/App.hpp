@@ -16,7 +16,10 @@ namespace st {
 		void main();
 		void processEvents();
 		void update();
+		void draw();
 		void mainMenuBar();
+
+		void drawGlobalsWindow();
 
 
 	private:

@@ -13,6 +13,8 @@ namespace st {
 		win.setFramerateLimit(60);
 		ImGui::SFML::Init(win);
 		ImGui::StyleColorsLight();
+		ImGuiStyle& style = ImGui::GetStyle();
+		style.WindowBorderSize = 0.f;
 		main();
 	}
 	App::~App() {
@@ -31,7 +33,7 @@ namespace st {
 			if (ImGui::Begin("Test")) {
 				ImGui::InputTextMultiline("ST Script Test", &buff);
 				if (ImGui::Button("Compile")) {
-					std::cout << st::script::calculateMath(buff, global_vars, global_vars) << "\n";
+					std::cout << "Ergebnis: " << st::script::run(buff, global_vars) << "\n";
 				}
 			}
 			ImGui::End();
@@ -63,8 +65,14 @@ namespace st {
 	void App::update() {
 		ImGui::SFML::Update(win, clock.restart());
 		mainMenuBar();
+		draw();
 
 	}
+
+	void App::draw() {
+		if (window_states["globalvars"]) drawGlobalsWindow();
+	}
+
 	void App::mainMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
 			
@@ -142,7 +150,7 @@ namespace st {
 				
 				ImGui::Separator();
 				if (ImGui::MenuItem("Global Var Window")) {
-
+					window_states["globalvars"] = !window_states["globalvars"];
 				}
 				if (ImGui::MenuItem("Storyline Window")) {
 
@@ -182,5 +190,12 @@ namespace st {
 			
 		}
 		ImGui::EndMainMenuBar();
+	}
+
+	void App::drawGlobalsWindow() {
+		if (ImGui::Begin("Global variables"), &window_states["globalvars"]) {
+			
+		}
+		ImGui::End();
 	}
 }
