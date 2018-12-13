@@ -8,7 +8,7 @@ namespace st {
 		void clearWhiteSpace(std::string& source) {
 			size_t p = source.find_first_not_of("\r\n\n\t ");
 			if (p != std::string::npos)
-				source.substr(source.find_first_not_of("\r\n\n\t "));
+				source = source.substr(p);
 		}
 
 		bool isNumeric(const std::string& input) {
@@ -46,6 +46,7 @@ namespace st {
 
 		double getVariable(const std::string& s, GlobalVars& globals, GlobalVars& locals) {
 			std::string var { getVariableName(s) };
+			clearWhiteSpace(var);
 			if (var[0] == ':') {
 				//It's a global
 
@@ -165,7 +166,7 @@ namespace st {
 			//7. !
 			k = s.find_first_of('!');
 			if (k != std::string::npos) {
-				std::string rec { s.substr(k+1) }; //FIXME: so that we can write !temp instead of temp!
+				std::string rec { s.substr(k + 1) }; //FIXME: so that we can write !temp instead of temp!
 				//Found either + or -
 				// We need to recurse, since there could be a var or a const left
 				if (calculateMath(rec, globals, locals) == 0) result = 1;
@@ -188,6 +189,72 @@ namespace st {
 			return result;
 		}
 
+		void setVar(std::string& s, GlobalVars& globals, GlobalVars& locals) {
+			clearWhiteSpace(s);
+			size_t p = s.find_first_of("+-*/");
+			if (p != std::string::npos) {
+				if (s[p + 1] != '=') throw std::invalid_argument("Didn't found required '='."); //TODO: Write better err msg
+				std::string temp { s.substr(p + 2) };
+				std::string var { getVariableName(s.substr(0, p)) };
+				double res = calculateMath(temp, globals, locals);
+				if (var[0] == ':') {
+					//Global
+					if (globals.find(var.substr(1)) == globals.end())
+						throw std::invalid_argument("Global () doesn't exist. Create it first in the Globals Window and then recompile the script!");
+
+					switch (s[p]) {
+						case '+':
+							globals[var] += res;
+							break;
+						case '-':
+							globals[var] -= res;
+							break;
+						case '*':
+							globals[var] *= res;
+							break;
+						case '/':
+							globals[var] /= res;
+							break;
+					}
+				} else {
+					if (locals.find(var) == locals.end())
+						throw std::invalid_argument("Local () doesn't exist.");
+
+					switch (s[p]) {
+						case '+':
+							locals[var] += res;
+							break;
+						case '-':
+							locals[var] -= res;
+							break;
+						case '*':
+							locals[var] *= res;
+							break;
+						case '/':
+							locals[var] /= res;
+							break;
+					}
+				}
+			} else {
+				//Check for normal assign operator (=)
+				p = s.find_first_of('=');
+				std::string var { getVariableName(s.substr(0, p)) };
+				std::string temp { s.substr(p + 1) };
+				double res = calculateMath(temp, globals, locals);
+				if (var[0] == ':') {
+					//Global (Have to cut out ':')
+					if (globals.find(var.substr(1)) == globals.end())
+						throw std::invalid_argument("Global () doesn't exist. Create it first in the Globals Window and then recompile the script!");
+
+					globals[var.substr(1)] = res;
+				} else {
+					//Local
+					locals.insert_or_assign(var, res);
+				}
+			}
+			s.clear();
+		}
+
 		bool run(std::string script, GlobalVars & globals) {
 			std::string executing;
 			std::stack<std::string> code;
@@ -199,6 +266,10 @@ namespace st {
 				clearWhiteSpace(executing);
 				//Check for keywords (return, if, else, {, }
 				//1. Check for return _;
+				if (executing.substr(0, 6) == "return") {
+					std::string temp { executing.substr(6) };
+					return calculateMath(temp, globals, vars) != 0;
+				}
 
 				//2. Check for if
 				if (executing.substr(0, 2) == "if") {
@@ -218,7 +289,7 @@ namespace st {
 					} else {
 						//We have to Compare
 						std::string lefts { executing.substr(0, res.first) };
-						std::string rights{ executing.substr(res.second) };
+						std::string rights { executing.substr(res.second) };
 						double left = calculateMath(lefts, globals, vars);
 						double right = calculateMath(rights, globals, vars);
 
@@ -256,7 +327,7 @@ namespace st {
 							code.pop();
 							continue;
 						}
-							code.pop();
+						code.pop();
 					}
 
 				}
@@ -265,7 +336,7 @@ namespace st {
 				//5. Check for else
 
 				//Check for operators
-				
+
 
 				//Check for setters
 				//1. *=
@@ -273,12 +344,12 @@ namespace st {
 				//3. +=
 				//4. -=
 				//5. =
-				calculateMath(executing, globals, vars);
+				setVar(executing, globals, vars);
 
 
 			}
 
-			return false;
+			return true;
 		}
 	}
 }
