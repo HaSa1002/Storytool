@@ -9,7 +9,7 @@ This project is currently under development and the list below may change during
 2. Tree View (Flowchart)
 3. Nodes
 4. Branching
-5. Multiple Grpahs per Project
+5. Multiple Graphs per Project
 6. Connections between graphs
 7. Global Variables to save Stats
 8. Nodesets connected to characters
@@ -20,5 +20,9 @@ This project is currently under development and the list below may change during
 15. Simulation/Debug mode (Playing of the story, to find dead ends and logical issues)
 
 ## In Progress
-1. Scriptlanguage
-2. Global Variables Window
+3. Nodes
+
+
+## To be improved
+11. Scriptlanguage
+7. Global Variables Window
