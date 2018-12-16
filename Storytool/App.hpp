@@ -1,5 +1,6 @@
 #pragma once
 #include "Project.hpp"
+#include "Node.hpp"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Config.hpp>

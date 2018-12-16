@@ -132,6 +132,7 @@
     <ClCompile Include="imgui_stdlib.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Project.cpp" />
   </ItemGroup>

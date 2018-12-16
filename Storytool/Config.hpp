@@ -5,6 +5,7 @@
 
 
 namespace st {
+	using sts = std::string;
 	using name = std::string;
 	using id = std::string;
 	using xmlData = af::XML::Structure;
