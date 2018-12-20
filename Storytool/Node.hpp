@@ -24,8 +24,10 @@ namespace st {
 		sts after_execute;
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-		void correctTransforms(); // Apply correct pos to sf::Text and correct size to sf::Shape
-
+		void correctTransforms(); // Apply correct size to sf::Shape
+		void setPosition(const sf::Vector2f& position); //sets the position and calls correctTransforms
+		void setDisplayString(const std::string& string); //sets the displayed string and calls correctTransforms
+		bool isHovered(const sf::Vector2i& mouse_pos);
 
 	};
 }
