@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="ActionSet.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />

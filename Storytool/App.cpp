@@ -24,21 +24,18 @@ namespace st {
 
 
 	void App::main() {
-	sf::Font f;
-	f.loadFromFile("font.ttf");
-	
-	Node n{"test", "", "Test", f};
-	n.rendered_name.setPosition(400, 400);
-	n.rendered_name.setFillColor(sf::Color::Black);
-	n.shape.setSize({200, 200 });
-	n.shape.setPosition(400, 400);
-	n.correctTransforms();
+		sf::Font f;
+		f.loadFromFile("font.ttf");
+		Node n { "test", "", "Test", f };
+		n.rendered_name.setFillColor(sf::Color::Black);
+		n.setPosition({ 400, 400 });
+
 		while (win.isOpen()) {
 			processEvents();
 			update();
 			ImGui::ShowDemoWindow();
 
-			
+
 			if (ImGui::Begin("Test")) {
 				ImGui::InputTextMultiline("ST Script Test", &buff);
 				if (ImGui::Button("Compile")) {
@@ -49,14 +46,12 @@ namespace st {
 
 			//Nodetest
 			if (ImGui::Begin("Nodetest")) {
-				
+
 			}
 			ImGui::End();
 
-			n.correctTransforms();
 			win.clear({ 250, 250, 250 });
 			win.draw(n);
-			//win.draw(n.rendered_name);
 			ImGui::SFML::Render(win);
 			win.display();
 		}
@@ -73,7 +68,9 @@ namespace st {
 				case sf::Event::Closed:
 					win.close();
 					break;
-
+				case sf::Event::MouseMoved:
+					
+				break;
 				default:
 					break;
 			}
@@ -92,7 +89,7 @@ namespace st {
 
 	void App::mainMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
-			
+
 			if (ImGui::BeginMenu("File")) {
 				if (ImGui::MenuItem("New")) {
 
@@ -127,7 +124,7 @@ namespace st {
 				}
 				ImGui::EndMenu();
 			}
-			
+
 			if (ImGui::BeginMenu("Edit")) {
 				if (ImGui::MenuItem("Undo")) {
 
@@ -142,21 +139,21 @@ namespace st {
 				if (ImGui::MenuItem("Cut")) {
 
 				}
-				
+
 				if (ImGui::MenuItem("Paste")) {
 
 				}
-				
+
 				if (ImGui::MenuItem("Dublicate")) {
 
 				}
-				
+
 				if (ImGui::MenuItem("Delete")) {
 
 				}
 				ImGui::EndMenu();
 			}
-			
+
 			if (ImGui::BeginMenu("View")) {
 				if (ImGui::MenuItem("Node Collection")) {
 
@@ -164,7 +161,7 @@ namespace st {
 				if (ImGui::MenuItem("Graph Overview")) {
 
 				}
-				
+
 				ImGui::Separator();
 				if (ImGui::MenuItem("Global Var Window")) {
 					window_states["globalvars"] = !window_states["globalvars"];
@@ -184,13 +181,13 @@ namespace st {
 				ImGui::EndMenu();
 			}
 
-			
+
 
 			if (ImGui::BeginMenu("Team")) {
 				if (ImGui::MenuItem("Connect")) {
 
 				}
-				
+
 				if (ImGui::MenuItem("Create")) {
 
 				}
@@ -204,7 +201,7 @@ namespace st {
 				}
 				ImGui::EndMenu();
 			}
-			
+
 		}
 		ImGui::EndMainMenuBar();
 	}
@@ -214,9 +211,9 @@ namespace st {
 			static std::string name;
 			static double value = 0;
 			ImGui::InputText("Name", &name, ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsNoBlank);
-			
-			ImGui::InputDouble("Value", &value, 0.1,1);
-			
+
+			ImGui::InputDouble("Value", &value, 0.1, 1);
+
 			if (ImGui::Button("Add")) {
 				if (name != "")
 					global_vars.insert_or_assign(name, value);
@@ -230,7 +227,7 @@ namespace st {
 					//FIXME: Seperate Init Value and Current value (if in sim)
 					//TODO: Add Delete
 
-				ImGui::TreePop();
+					ImGui::TreePop();
 				}
 			}
 			ImGui::TreePop();
