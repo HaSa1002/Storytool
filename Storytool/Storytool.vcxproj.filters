@@ -134,5 +134,8 @@
     <ClInclude Include="Parser.hpp">
       <Filter>Headerdateien\ST Script</Filter>
     </ClInclude>
+    <ClInclude Include="SfmlHelper.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

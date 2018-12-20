@@ -156,6 +156,7 @@
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="NodeSet.hpp" />
+    <ClInclude Include="SfmlHelper.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

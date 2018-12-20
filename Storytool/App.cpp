@@ -32,6 +32,7 @@ namespace st {
 	n.rendered_name.setFillColor(sf::Color::Black);
 	n.shape.setSize({200, 200 });
 	n.shape.setPosition(400, 400);
+	n.correctTransforms();
 		while (win.isOpen()) {
 			processEvents();
 			update();
@@ -52,10 +53,10 @@ namespace st {
 			}
 			ImGui::End();
 
-
+			n.correctTransforms();
 			win.clear({ 250, 250, 250 });
 			win.draw(n);
-			win.draw(n.rendered_name);
+			//win.draw(n.rendered_name);
 			ImGui::SFML::Render(win);
 			win.display();
 		}

@@ -1,6 +1,7 @@
 #pragma once
 #include "Config.hpp"
 #include "Action.hpp"
+#include "SfmlHelper.hpp"
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -11,6 +12,8 @@
 
 namespace st {
 	struct Node : sf::Drawable {
+		const float offset = 10.f;
+	Node() {};
 		Node(const std::string& id, const std::string& t_id, const std::string& rendered_name, sf::Font& font): id{id}, type_id{t_id}, rendered_name{rendered_name, font} {};
 		std::string id;
 		std::string type_id;
