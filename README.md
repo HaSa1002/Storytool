@@ -5,6 +5,8 @@ The goal is to create a tool to help storymakers to write branching and complex 
 This project is currently under development and the list below may change during development.
 I am sorry,  but in the GitHub Preview is the following list unsatisfying, since each Feature has a unique number.
 
+**Last Update: 21.12.2018**
+
 ## Planned Features
 1 Storylines (You can write the script)
 
