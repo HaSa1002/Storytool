@@ -16,7 +16,7 @@ namespace st {
 		std::unordered_map<st::id, Node> nodes;
 		std::unordered_map<st::id, st::id> connections;
 
-		Node* hitNode(const sf::Vector2i& pos);
+		Node* hitNode(const sf::Vector2f& pos);
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

@@ -24,12 +24,12 @@ namespace st {
 		return active != nullptr;
 	}
 
-	void Project::moveNode(const sf::Vector2i & dest) { 
+	void Project::moveNode(const sf::Vector2f & dest) { 
 		if (hasActiveNode())
-			active->setPosition(static_cast<sf::Vector2f>(dest));
+			active->setPosition(dest);
 	}
 
-	void Project::selectNode(const sf::Vector2i & pos) { 
+	void Project::selectNode(const sf::Vector2f & pos) { 
 	active = nullptr;
 		for (auto& graph : graphs) {
 			if (Node* n = graph.second.hitNode(pos)) {

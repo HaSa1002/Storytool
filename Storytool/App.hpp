@@ -40,6 +40,8 @@ namespace st {
 
 	sf::Vector2i last_mousePos;
 	float zoomfactor = 1.f;
+	bool node_moving = false;
+	sf::Vector2f move_offset;
 
 	sf::RenderWindow win;
 	sf::Clock clock;

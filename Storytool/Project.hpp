@@ -25,8 +25,8 @@ namespace st {
 		//Input Handler Functions
 		Node* active = nullptr;
 		bool hasActiveNode();
-		void moveNode(const sf::Vector2i& dest);
-		void selectNode(const sf::Vector2i& pos);
+		void moveNode(const sf::Vector2f& dest);
+		void selectNode(const sf::Vector2f& pos);
 		void deselectNode();
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

@@ -2,7 +2,7 @@
 
 namespace st {
 
-	Node* Graph::hitNode(const sf::Vector2i& pos) {
+	Node* Graph::hitNode(const sf::Vector2f& pos) {
 			for (auto& i : nodes) {
 				if (i.second.isHovered(pos))
 					return &i.second;

@@ -27,10 +27,10 @@ namespace st {
 		//Test stuff
 		sf::Font f;
 		f.loadFromFile("font.ttf");
-		project.graphs["New"] = Graph{"New", "New Graph", "It's a test graph" };
+		project.graphs["New"] = Graph { "New", "New Graph", "It's a test graph" };
 		auto& nodes = project.graphs["New"].nodes;
-		nodes.insert({"test", Node{ "test", "", "Test", f }});
-		nodes["test"].setPosition({400, 400 });
+		nodes.insert({ "test", Node{ "test", "", "Test", f } });
+		nodes["test"].setPosition({ 400, 400 });
 		nodes["test"].shape.setFillColor(sf::Color::Cyan);
 		//End
 
@@ -70,12 +70,15 @@ namespace st {
 							ImGui::SetWindowPos("right-click", sf::Mouse::getPosition());
 							window_states["right-click-menu"] = false; //FIXME: complete right-click menu
 							break;
-						case sf::Mouse::Button::Left:
-							//Disappear right-click menu if the click was not in a window
-							window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
-						//Select node
-							project.selectNode({ e.mouseButton.x, e.mouseButton.y });
-							break;
+						case sf::Mouse::Button::Left: {
+								//Disappear right-click menu if the click was not in a window
+								window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
+							//Select node
+
+								project.selectNode(win.mapPixelToCoords(sf::Mouse::getPosition()));
+								node_moving = false;
+								break;
+							}
 						default:
 							break;
 					}
@@ -84,8 +87,14 @@ namespace st {
 				case sf::Event::MouseMoved:
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 						//We want to move a node or select a group of nodes
-						if (project.hasActiveNode())
-							project.moveNode({ e.mouseMove.x, e.mouseMove.y });
+						if (project.hasActiveNode()) {
+							if (!node_moving) {
+								node_moving = true;
+								move_offset = win.mapPixelToCoords(sf::Mouse::getPosition()) - project.active->getPosition();
+							}
+							auto p = sf::Mouse::getPosition();
+							project.moveNode(win.mapPixelToCoords(p)-move_offset);
+						}
 						//TODO: else //Determine if actions started
 						//if then position select shape
 						//else increase size to the x,y of the cursor
@@ -122,6 +131,15 @@ namespace st {
 						win.setView(view);
 						break;
 					}
+
+				case sf::Event::KeyReleased:
+					switch (e.key.code) {
+						case sf::Keyboard::M:
+
+						default:
+							break;
+					}
+					break;
 				default:
 					break;
 			}

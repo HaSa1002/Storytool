@@ -9,8 +9,6 @@ void st::Node::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 void st::Node::correctTransforms() {
 	
 	auto p = shape.getPosition();
-	//p += sf::Vector2f(offset, offset);
-	//rendered_name.setPosition(p);
 	rendered_name.setCharacterSize(310);
 	auto bounds = rendered_name.getGlobalBounds();
 	sf::extrude<float>(bounds, offset);
@@ -19,7 +17,7 @@ void st::Node::correctTransforms() {
 }
 
 void st::Node::setPosition(const sf::Vector2f & position) { 
-	rendered_name.setPosition(position);
+	rendered_name.move(position - getPosition());
 	correctTransforms();
 }
 
@@ -28,6 +26,12 @@ void st::Node::setDisplayString(const std::string & string) {
 	correctTransforms();
 }
 
-bool st::Node::isHovered(const sf::Vector2i & mouse_pos) {
-	return shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mouse_pos));
+bool st::Node::isHovered(const sf::Vector2f & mouse_pos) {
+	return shape.getGlobalBounds().contains(mouse_pos);
+}
+
+sf::Vector2f st::Node::getPosition() {
+	auto bounds = rendered_name.getGlobalBounds();
+	sf::extrude<float>(bounds, offset);
+	return sf::Vector2f(bounds.left, bounds.top);
 }
