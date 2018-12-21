@@ -37,7 +37,7 @@ namespace st {
 
 			//Nodetest
 			if (ImGui::Begin("Nodetest")) {
-				
+
 			}
 			ImGui::End();
 
@@ -63,23 +63,47 @@ namespace st {
 					switch (e.mouseButton.button) {
 						case sf::Mouse::Button::Right:
 							//Context menue
-						break;
+							break;
 						case sf::Mouse::Button::Left:
 							//Select node
-							project.selectNode({e.mouseButton.x, e.mouseButton.y });
-						break;
+							project.selectNode({ e.mouseButton.x, e.mouseButton.y });
+							break;
 						default:
 							break;
 					}
-					
-				break;
+
+					break;
 				case sf::Event::MouseMoved:
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-						//We want to move a node
-						project.moveNode({e.mouseMove.x, e.mouseMove.y});
+						//We want to move a node or select a group of nodes
+						if (project.hasActiveNode())
+							project.moveNode({ e.mouseMove.x, e.mouseMove.y });
+						//TODO: else //Determine if actions started
+						//if then position select shape
+						//else increase size to the x,y of the cursor
 
+					} else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+						//Move the view
+						auto& s = e.mouseMove;
+						auto view = win.getView();
+						view.move(last_mousePos.x - s.x, last_mousePos.y - s.y);
+						
+						win.setView(view);
 					}
-				break;
+
+					last_mousePos.x = e.mouseMove.x;
+					last_mousePos.y = e.mouseMove.y;
+					break;
+				case sf::Event::MouseWheelScrolled: {
+						auto& s = e.mouseWheelScroll;
+						auto view = win.getView();
+						if (s.delta < 0)
+							view.zoom(-1.1f * s.delta);
+						else
+							view.zoom(0.9f * s.delta);
+						win.setView(view);
+						break;
+					}
 				default:
 					break;
 			}

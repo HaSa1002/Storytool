@@ -36,7 +36,7 @@ namespace st {
 
 	Project project;
 
-	
+	sf::Vector2i last_mousePos;
 
 	sf::RenderWindow win;
 	sf::Clock clock;
