@@ -63,8 +63,12 @@ namespace st {
 					switch (e.mouseButton.button) {
 						case sf::Mouse::Button::Right:
 							//Context menue
+							ImGui::SetWindowPos("right-click", sf::Mouse::getPosition());
+							window_states["right-click-menu"] = false; //FIXME: complete right-click menu
 							break;
 						case sf::Mouse::Button::Left:
+							//Disappear right-click menu if the click was not in a window
+								window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
 							//Select node
 							project.selectNode({ e.mouseButton.x, e.mouseButton.y });
 							break;
@@ -82,12 +86,12 @@ namespace st {
 						//if then position select shape
 						//else increase size to the x,y of the cursor
 
-					} else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+					} else if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 						//Move the view
 						auto& s = e.mouseMove;
 						auto view = win.getView();
-						view.move(last_mousePos.x - s.x, last_mousePos.y - s.y);
-						
+						view.move(static_cast<float>(last_mousePos.x - s.x)*zoomfactor, static_cast<float>(last_mousePos.y - s.y)*zoomfactor);
+
 						win.setView(view);
 					}
 
@@ -97,10 +101,20 @@ namespace st {
 				case sf::Event::MouseWheelScrolled: {
 						auto& s = e.mouseWheelScroll;
 						auto view = win.getView();
-						if (s.delta < 0)
-							view.zoom(-1.1f * s.delta);
-						else
-							view.zoom(0.9f * s.delta);
+						//Set the center to the cursor, to zoom at the cursor (feels better/normal)
+						//auto center = view.getCenter();
+						
+						//view.setCenter(win.mapPixelToCoords({(s.x), (s.y)}));
+						view.setCenter(sf::Vector2f{static_cast<float>(s.x), static_cast<float>(s.y)});
+						if (s.delta < 0 && zoomfactor < 5.0f) {
+							zoomfactor *= 1.5;
+							view.zoom(1.5);
+						} else if (s.delta > 0 && zoomfactor > 0.125f) {
+							zoomfactor *= 0.5;
+							view.zoom(0.5);
+						}
+						//Reset the center
+						//view.setCenter(center);
 						win.setView(view);
 						break;
 					}
@@ -115,14 +129,36 @@ namespace st {
 		draw();
 
 	}
+	
+
+	void App::drawRightClickMenu() {
+		ImGui::SetNextWindowBgAlpha(0.7f); // Transparent background
+		if (ImGui::Begin("right-click", nullptr, ImGuiWindowFlags_NoMove | /*ImGuiWindowFlags_NoTitleBar |*/ ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoNav)) {
+			ImGui::Text("Right-Click Menu");
+			ImGui::Separator();
+			if (ImGui::IsMousePosValid())
+				ImGui::Text("Mouse Position: (%.1f,%.1f)", ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
+			else
+				ImGui::Text("Mouse Position: <invalid>");
+
+			if (ImGui::Button("Testy Button")) {
+				std::cout << "T(a)esty Button was pressed!\n";
+				window_states["globalvars"] = false;
+			}
+		}
+		ImGui::End();
+	}
 
 	void App::draw() {
 		if (window_states["globalvars"]) drawGlobalsWindow();
+		if (window_states["right-click-menu"]) drawRightClickMenu();
+		
+		
 	}
 
 	void App::mainMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
-
+			
 			if (ImGui::BeginMenu("File")) {
 				if (ImGui::MenuItem("New")) {
 

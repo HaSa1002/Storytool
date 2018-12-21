@@ -17,6 +17,7 @@ namespace st {
 		void main();
 		void processEvents();
 		void update();
+		void drawRightClickMenu();
 		void draw();
 		void mainMenuBar();
 
@@ -31,12 +32,14 @@ namespace st {
 		{"globalvars", false },
 		{"graphoverview", false },
 		{"nodecollection", false },
-		{"actions", false }
+		{"actions", false },
+		{"right-click-menu", false }
 	};
 
 	Project project;
 
 	sf::Vector2i last_mousePos;
+	float zoomfactor = 1.f;
 
 	sf::RenderWindow win;
 	sf::Clock clock;
