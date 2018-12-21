@@ -123,7 +123,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ActionSet.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
@@ -138,8 +137,6 @@
     <ClCompile Include="Project.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Action.hpp" />
-    <ClInclude Include="ActionSet.hpp" />
     <ClInclude Include="App.hpp" />
     <ClInclude Include="Character.hpp" />
     <ClInclude Include="Config.hpp" />

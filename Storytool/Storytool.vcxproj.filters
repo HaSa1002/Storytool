@@ -63,9 +63,6 @@
     <ClCompile Include="imgui-SFML.cpp">
       <Filter>Quelldateien\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="ActionSet.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Project.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -118,12 +115,6 @@
     </ClInclude>
     <ClInclude Include="Config.hpp">
       <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Action.hpp">
-      <Filter>Headerdateien\actions</Filter>
-    </ClInclude>
-    <ClInclude Include="ActionSet.hpp">
-      <Filter>Headerdateien\actions</Filter>
     </ClInclude>
     <ClInclude Include="NodeSet.hpp">
       <Filter>Headerdateien\nodes</Filter>
