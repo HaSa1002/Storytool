@@ -35,22 +35,13 @@ namespace st {
 			update();
 			ImGui::ShowDemoWindow();
 
-
-			if (ImGui::Begin("Test")) {
-				ImGui::InputTextMultiline("ST Script Test", &buff);
-				if (ImGui::Button("Compile")) {
-					std::cout << "Ergebnis: " << st::script::run(buff, global_vars) << "\n";
-				}
-			}
-			ImGui::End();
-
 			//Nodetest
 			if (ImGui::Begin("Nodetest")) {
-
+				
 			}
 			ImGui::End();
 
-			win.clear({ 250, 250, 250 });
+			win.clear({ 245, 245, 245 });
 			win.draw(n);
 			ImGui::SFML::Render(win);
 			win.display();
@@ -68,8 +59,26 @@ namespace st {
 				case sf::Event::Closed:
 					win.close();
 					break;
-				case sf::Event::MouseMoved:
+				case sf::Event::MouseButtonReleased:
+					switch (e.mouseButton.button) {
+						case sf::Mouse::Button::Right:
+							//Context menue
+						break;
+						case sf::Mouse::Button::Left:
+							//Select node
+							project.selectNode({e.mouseButton.x, e.mouseButton.y });
+						break;
+						default:
+							break;
+					}
 					
+				break;
+				case sf::Event::MouseMoved:
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+						//We want to move a node
+						project.moveNode({e.mouseMove.x, e.mouseMove.y});
+
+					}
 				break;
 				default:
 					break;
@@ -216,12 +225,12 @@ namespace st {
 
 			if (ImGui::Button("Add")) {
 				if (name != "")
-					global_vars.insert_or_assign(name, value);
+					project.global_vars.insert_or_assign(name, value);
 				name.clear();
 				value = 0;
 			}
 			ImGui::TreePush("vars");
-			for (auto& i : global_vars) {
+			for (auto& i : project.global_vars) {
 				if (ImGui::TreeNode(i.first.data())) {
 					ImGui::InputDouble("Value", &i.second);
 					//FIXME: Seperate Init Value and Current value (if in sim)

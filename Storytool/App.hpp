@@ -33,9 +33,10 @@ namespace st {
 		{"nodecollection", false },
 		{"actions", false }
 	};
-	//Test
-	std::string buff;
-	GlobalVars global_vars;
+
+	Project project;
+
+	
 
 	sf::RenderWindow win;
 	sf::Clock clock;
