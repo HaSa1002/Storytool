@@ -1,6 +1,5 @@
 #pragma once
 #include "Config.hpp"
-#include "Action.hpp"
 #include "SfmlHelper.hpp"
 
 #include <SFML/Graphics/Drawable.hpp>
