@@ -43,4 +43,9 @@ namespace st {
 		active = nullptr;
 	}
 
+	void Project::draw(sf::RenderTarget & target, sf::RenderStates states) const { 
+		for (auto& graph : graphs)
+			target.draw(graph.second);
+	}
+
 }

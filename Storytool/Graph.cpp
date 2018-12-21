@@ -9,4 +9,14 @@ namespace st {
 			}
 		return nullptr;
 	}
+
+	//FIXME: Draw list
+	void Graph::draw(sf::RenderTarget & target, sf::RenderStates states) const { 
+		for (auto& n : nodes) {
+			target.draw(n.second);
+		}
+		//Draw connections
+
+		//Draw headline
+	}
 }

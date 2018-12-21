@@ -6,7 +6,7 @@
 #include "Parser.hpp"
 
 namespace st {
-	struct Project {
+	struct Project : public sf::Drawable {
 	Project() :name{"Untitled Project"} {};
 	Project(const std::string& path);
 		std::string name;
@@ -28,7 +28,7 @@ namespace st {
 		void moveNode(const sf::Vector2i& dest);
 		void selectNode(const sf::Vector2i& pos);
 		void deselectNode();
-
+		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	};
 }

@@ -24,11 +24,15 @@ namespace st {
 
 
 	void App::main() {
+		//Test stuff
 		sf::Font f;
 		f.loadFromFile("font.ttf");
-		Node n { "test", "", "Test", f };
-		n.rendered_name.setFillColor(sf::Color::Black);
-		n.setPosition({ 400, 400 });
+		project.graphs["New"] = Graph{"New", "New Graph", "It's a test graph" };
+		auto& nodes = project.graphs["New"].nodes;
+		nodes.insert({"test", Node{ "test", "", "Test", f }});
+		nodes["test"].setPosition({400, 400 });
+		nodes["test"].shape.setFillColor(sf::Color::Cyan);
+		//End
 
 		while (win.isOpen()) {
 			processEvents();
@@ -42,7 +46,7 @@ namespace st {
 			ImGui::End();
 
 			win.clear({ 245, 245, 245 });
-			win.draw(n);
+			win.draw(project);
 			ImGui::SFML::Render(win);
 			win.display();
 		}
@@ -68,8 +72,8 @@ namespace st {
 							break;
 						case sf::Mouse::Button::Left:
 							//Disappear right-click menu if the click was not in a window
-								window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
-							//Select node
+							window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
+						//Select node
 							project.selectNode({ e.mouseButton.x, e.mouseButton.y });
 							break;
 						default:
@@ -103,9 +107,9 @@ namespace st {
 						auto view = win.getView();
 						//Set the center to the cursor, to zoom at the cursor (feels better/normal)
 						//auto center = view.getCenter();
-						
+
 						//view.setCenter(win.mapPixelToCoords({(s.x), (s.y)}));
-						view.setCenter(sf::Vector2f{static_cast<float>(s.x), static_cast<float>(s.y)});
+						view.setCenter(sf::Vector2f { static_cast<float>(s.x), static_cast<float>(s.y) });
 						if (s.delta < 0 && zoomfactor < 5.0f) {
 							zoomfactor *= 1.5;
 							view.zoom(1.5);
@@ -129,7 +133,7 @@ namespace st {
 		draw();
 
 	}
-	
+
 
 	void App::drawRightClickMenu() {
 		ImGui::SetNextWindowBgAlpha(0.7f); // Transparent background
@@ -152,13 +156,13 @@ namespace st {
 	void App::draw() {
 		if (window_states["globalvars"]) drawGlobalsWindow();
 		if (window_states["right-click-menu"]) drawRightClickMenu();
-		
-		
+
+
 	}
 
 	void App::mainMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
-			
+
 			if (ImGui::BeginMenu("File")) {
 				if (ImGui::MenuItem("New")) {
 
