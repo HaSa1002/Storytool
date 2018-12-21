@@ -27,7 +27,13 @@ void st::Node::setDisplayString(const std::string & string) {
 }
 
 bool st::Node::isHovered(const sf::Vector2f & mouse_pos) {
-	return shape.getGlobalBounds().contains(mouse_pos);
+	if (shape.getGlobalBounds().contains(mouse_pos)) {
+		shape.setOutlineColor(sf::Color::Black);
+		shape.setOutlineThickness(1);
+		return true;
+	}
+	shape.setOutlineThickness(0);
+	return false;
 }
 
 sf::Vector2f st::Node::getPosition() {
