@@ -1,17 +1,12 @@
 #include "Graph.hpp"
 
-void st::Graph::handleMouseClick(sf::Event::MouseButtonEvent & event) {
-	if (event.button == sf::Mouse::Button::Right) {
-		selected == nullptr;
-	} //... Add all possible cases here
+namespace st {
 
-	if (selected == nullptr) {
-		for (auto i : nodes) {
-			if (i.second.isHovered({ event.x, event.y })) {
-				selected = &i.second;
+	Node* Graph::hitNode(const sf::Vector2i& pos) {
+			for (auto& i : nodes) {
+				if (i.second.isHovered(pos))
+					return &i.second;
 			}
-		}
-	} else {
-
+		return nullptr;
 	}
 }

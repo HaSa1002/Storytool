@@ -7,16 +7,14 @@
 
 namespace st {
 	struct Graph {
-		std::string name;
+		std::string id;
 		std::string headline;
 		std::string description;
 
-		Node* selected = nullptr;
-		bool isActive = false;
-		std::unordered_map<id, Node> nodes;
-		std::unordered_map<id, id> connections;
-		//maybe return bool?
-		void handleMouseClick(sf::Event::MouseButtonEvent& event);
+		std::unordered_map<st::id, Node> nodes;
+		std::unordered_map<st::id, st::id> connections;
+		
+		Node* hitNode(const sf::Vector2i& pos);
 
 		
 	};
