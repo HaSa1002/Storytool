@@ -9,7 +9,6 @@ void st::Node::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 void st::Node::correctTransforms() {
 	
 	auto p = shape.getPosition();
-	rendered_name.setCharacterSize(310);
 	auto bounds = rendered_name.getGlobalBounds();
 	sf::extrude<float>(bounds, offset);
 	shape.setPosition(bounds.left, bounds.top);
