@@ -17,6 +17,7 @@ namespace st {
 		void main();
 		void processEvents();
 		void update();
+		void drawPropertyEditor();
 		void drawRightClickMenu();
 		void draw();
 		void mainMenuBar();

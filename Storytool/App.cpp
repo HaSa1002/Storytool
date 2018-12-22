@@ -30,6 +30,7 @@ namespace st {
 		project.graphs["New"] = Graph { "New", "New Graph", "It's a test graph" };
 		auto& nodes = project.graphs["New"].nodes;
 		nodes.insert({ "test", Node{ "test", "", "Test", f } });
+		nodes["test"].rendered_name.setCharacterSize(60);
 		nodes["test"].setPosition({ 400, 400 });
 		nodes["test"].shape.setFillColor(sf::Color::Cyan);
 		//End
@@ -39,11 +40,7 @@ namespace st {
 			update();
 			ImGui::ShowDemoWindow();
 
-			//Nodetest
-			if (ImGui::Begin("Nodetest")) {
-
-			}
-			ImGui::End();
+			
 
 			win.clear({ 245, 245, 245 });
 			win.draw(project);
@@ -74,8 +71,8 @@ namespace st {
 								//Disappear right-click menu if the click was not in a window
 								window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
 							//Select node
-
-								project.selectNode(win.mapPixelToCoords(sf::Mouse::getPosition()));
+								if (!ImGui::IsAnyItemActive())
+									project.selectNode(win.mapPixelToCoords(sf::Mouse::getPosition()));
 								node_moving = false;
 								break;
 							}
@@ -85,19 +82,20 @@ namespace st {
 
 					break;
 				case sf::Event::MouseMoved:
-					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !ImGui::IsAnyItemActive()) {
 						//We want to move a node or select a group of nodes
 						if (project.hasActiveNode()) {
 							if (!node_moving) {
 								node_moving = true;
 								move_offset = win.mapPixelToCoords(sf::Mouse::getPosition()) - project.active->getPosition();
+								if (sf::length<float>(move_offset) > sf::length<float>(project.active->shape.getSize())) {
+									project.deselectNode();
+									goto skip;
+								}
 							}
 							auto p = sf::Mouse::getPosition();
 							project.moveNode(win.mapPixelToCoords(p)-move_offset);
 						}
-						//TODO: else //Determine if actions started
-						//if then position select shape
-						//else increase size to the x,y of the cursor
 
 					} else if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 						//Move the view
@@ -107,7 +105,7 @@ namespace st {
 
 						win.setView(view);
 					}
-
+					skip:
 					last_mousePos.x = e.mouseMove.x;
 					last_mousePos.y = e.mouseMove.y;
 					break;
@@ -152,6 +150,22 @@ namespace st {
 
 	}
 
+	void App::drawPropertyEditor() {
+	static std::string buff;
+	Node& n = *project.active;
+		if (ImGui::Begin("Property Editor", &window_states["property"])) {
+			if (!project.hasActiveNode()) {
+				ImGui::Text("No Node selected.");
+				goto end;
+			}
+			buff = n.rendered_name.getString();
+			if (ImGui::InputText("Text", &buff)) {
+				n.setDisplayString(buff);
+			}
+		}
+		end:
+		ImGui::End();
+	}
 
 	void App::drawRightClickMenu() {
 		ImGui::SetNextWindowBgAlpha(0.7f); // Transparent background
@@ -173,6 +187,7 @@ namespace st {
 
 	void App::draw() {
 		if (window_states["globalvars"]) drawGlobalsWindow();
+		if (window_states["property"]) drawPropertyEditor();
 		if (window_states["right-click-menu"]) drawRightClickMenu();
 
 
@@ -267,7 +282,7 @@ namespace st {
 					window_states["character"] = !window_states["character"];
 				}
 				if (ImGui::MenuItem("Property Window")) {
-
+					window_states["property"] = !window_states["property"];
 				}
 				ImGui::EndMenu();
 			}
