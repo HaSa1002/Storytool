@@ -5,7 +5,7 @@ The goal is to create a tool to help storymakers to write branching and complex 
 This project is currently under development and the list below may change during development.
 I am sorry,  but in the GitHub Preview is the following list unsatisfying, since each Feature has a unique number.
 
-**Last Update: 21.12.2018**
+**Last Update: 22.12.2018**
 
 ## Planned Features
 1 Storylines (You can write the script)
@@ -28,17 +28,23 @@ I am sorry,  but in the GitHub Preview is the following list unsatisfying, since
 
 15 Simulation/Debug mode (Playing of the story, to find dead ends and logical issues)
 
+20 Contextual Right click menu
+
 ## In Progress
-3 Nodes
+
 
 16 Graphs
 
-17 Input Handling (Selecting of Nodes, moving, etc..)
+18 Project (Container for Multiple Graphs, global vars, characters, nodesets, storylines)
 
-
+19 Property Editor
 
 ## To be improved (Done first stage)
+3 Nodes
+
 11 Scriptlanguage to activate a node only based on the script (complex conditions, adding values to global variables, ...)
+
+17 Input Handling (Selecting of Nodes, moving, etc..)
 
 18 Global Variables Window
 
