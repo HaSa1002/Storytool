@@ -72,7 +72,7 @@ namespace st {
 								window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
 							//Select node
 								if (!ImGui::IsAnyItemActive())
-									project.selectNode(win.mapPixelToCoords(sf::Mouse::getPosition()));
+									project.selectNode(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
 								node_moving = false;
 								break;
 							}
@@ -87,13 +87,13 @@ namespace st {
 						if (project.hasActiveNode()) {
 							if (!node_moving) {
 								node_moving = true;
-								move_offset = win.mapPixelToCoords(sf::Mouse::getPosition()) - project.active->getPosition();
+								move_offset = win.mapPixelToCoords(sf::Mouse::getPosition(win)) - project.active->getPosition();
 								if (sf::length<float>(move_offset) > sf::length<float>(project.active->shape.getSize())) {
 									project.deselectNode();
 									goto skip;
 								}
 							}
-							auto p = sf::Mouse::getPosition();
+							auto p = sf::Mouse::getPosition(win);
 							project.moveNode(win.mapPixelToCoords(p)-move_offset);
 						}
 
@@ -114,7 +114,7 @@ namespace st {
 						auto view = win.getView();
 						//Set the center to the cursor, to zoom at the cursor (feels better/normal)
 						//auto center = view.getCenter();
-
+						//FIXME: Scrolling
 						//view.setCenter(win.mapPixelToCoords({(s.x), (s.y)}));
 						view.setCenter(sf::Vector2f { static_cast<float>(s.x), static_cast<float>(s.y) });
 						if (s.delta < 0 && zoomfactor < 5.0f) {
