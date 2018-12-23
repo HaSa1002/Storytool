@@ -1,6 +1,7 @@
 #pragma once
 #include "Config.hpp"
 #include "Node.hpp"
+#include "Connection.hpp"
 #include <SFML/Window/Event.hpp>
 #include <unordered_map>
 
@@ -14,12 +15,14 @@ namespace st {
 		std::string description;
 
 		std::unordered_map<st::id, Node> nodes;
-		std::unordered_map<st::id, st::id> connections;
+		std::unordered_map<std::pair<std::string, std::string>, Connection> connections;
 		size_t node_id = 0;
 		Node* hitNode(const sf::Vector2f& pos);
 
+		void update();
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 		void addNode(const Node* node);
+		void deleteNode(const std::string& id);
 
 	};
 }

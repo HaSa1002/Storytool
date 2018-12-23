@@ -75,6 +75,9 @@
     <ClCompile Include="Graph.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Connection.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.hpp">
@@ -110,23 +113,26 @@
     <ClInclude Include="Graph.hpp">
       <Filter>Headerdateien\graph</Filter>
     </ClInclude>
-    <ClInclude Include="Node.hpp">
-      <Filter>Headerdateien\nodes</Filter>
-    </ClInclude>
     <ClInclude Include="Config.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Character.hpp">
       <Filter>Headerdateien\character</Filter>
     </ClInclude>
-    <ClInclude Include="Project.hpp">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="Parser.hpp">
       <Filter>Headerdateien\ST Script</Filter>
     </ClInclude>
     <ClInclude Include="SfmlHelper.hpp">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>Headerdateien\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Project.hpp">
+      <Filter>Headerdateien\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Connection.hpp">
+      <Filter>Headerdateien\graph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

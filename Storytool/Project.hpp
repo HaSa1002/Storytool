@@ -41,6 +41,7 @@ namespace st {
 		void moveNode(const sf::Vector2f& dest);
 		void selectNode(const sf::Vector2f& pos);
 		void addNode(const Node* node);
+		void deleteNode(const std::string& id);
 		void deselectNode();
 
 		//Drawing

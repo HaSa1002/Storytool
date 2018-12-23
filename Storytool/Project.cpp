@@ -88,6 +88,11 @@ namespace st {
 		}
 	}
 
+	void Project::deleteNode(const std::string & id) { 
+		if (active->id == id) active = nullptr;
+		current_graph->deleteNode(id);
+	}
+
 	void Project::deselectNode() {
 		active = nullptr;
 	}
