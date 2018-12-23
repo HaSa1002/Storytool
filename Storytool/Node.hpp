@@ -10,12 +10,24 @@
 #include <unordered_set>
 
 namespace st {
+	const float offset = 10.f;
 	struct Node : sf::Drawable {
-		const float offset = 10.f;
 	Node() {};
-		Node(const std::string& id, const std::string& t_id, const std::string& rendered_name, sf::Font& font): id{id}, type_id{t_id}, rendered_name{rendered_name, font} {};
+		Node(const std::string& id, const st::id& character, const std::string& rendered_name, sf::Font& font): id{id}, character{character}, rendered_name{rendered_name, font} {};
+		Node(const std::string& id, const st::id& character, const std::string& rendered_name,
+		sf::Font& font, const sf::Color& bg_color, const sf::Color& t_color, 
+		const sts& is_activated, const sts& after_execute) : id { id }, character { character },
+		rendered_name { rendered_name, font }, 
+		is_activated{is_activated}, after_execute{after_execute} {
+			this->rendered_name.setFillColor(t_color);
+			shape.setFillColor(bg_color);
+		};
+		Node(const Node& n) :id{n.id}, character{n.character}, rendered_name{n.rendered_name},
+		shape{n.shape}, storylines{n.storylines}, is_activated{n.is_activated}, after_execute{n.after_execute} {}
+
+		
 		std::string id;
-		std::string type_id;
+		st::id character;
 		sf::Text rendered_name;
 		sf::RectangleShape shape;
 		std::unordered_set<st::id> storylines;
