@@ -8,13 +8,14 @@ namespace st {
 
 
 	App::App() {
-		win.create(sf::VideoMode::getDesktopMode(), "Storytool", sf::Style::Default);
+		win.create(sf::VideoMode::getDesktopMode(), "Storytool | "+project.name, sf::Style::Default);
 		ShowWindow(win.getSystemHandle(), SW_MAXIMIZE);
 		win.setFramerateLimit(60);
 		ImGui::SFML::Init(win);
 		ImGui::StyleColorsLight();
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.WindowBorderSize = 0.f;
+
 		main();
 	}
 	App::~App() {
