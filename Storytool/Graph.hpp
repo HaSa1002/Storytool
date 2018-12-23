@@ -15,10 +15,11 @@ namespace st {
 
 		std::unordered_map<st::id, Node> nodes;
 		std::unordered_map<st::id, st::id> connections;
-
+		size_t node_id = 0;
 		Node* hitNode(const sf::Vector2f& pos);
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+		void addNode(const Node* node);
 
 	};
 }

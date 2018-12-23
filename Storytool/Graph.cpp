@@ -3,20 +3,25 @@
 namespace st {
 
 	Node* Graph::hitNode(const sf::Vector2f& pos) {
-			for (auto& i : nodes) {
-				if (i.second.isHovered(pos))
-					return &i.second;
-			}
+		for (auto& i : nodes) {
+			if (i.second.isHovered(pos))
+				return &i.second;
+		}
 		return nullptr;
 	}
 
 	//FIXME: Draw list
-	void Graph::draw(sf::RenderTarget & target, sf::RenderStates states) const { 
+	void Graph::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 		for (auto& n : nodes) {
 			target.draw(n.second);
 		}
 		//Draw connections
 
 		//Draw headline
+	}
+	void Graph::addNode(const Node * node) {
+		Node n = *node;
+		n.id = std::to_string(++node_id);
+		nodes.insert({ n.id, n });
 	}
 }
