@@ -1,11 +1,11 @@
 #pragma once
 #include "Project.hpp"
-#include "Node.hpp"
+
+#include "imgui.h"
+#include "imgui-SFML.h"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Config.hpp>
-#include "imgui.h"
-#include "imgui-SFML.h"
 
 namespace st {
 	class App {
@@ -17,6 +17,9 @@ namespace st {
 		void main();
 		void processEvents();
 		void update();
+		void drawStorylineWindow();
+		void drawCharacterWindow();
+		void drawNodeCollection();
 		void drawPropertyEditor();
 		void drawRightClickMenu();
 		void draw();
@@ -29,10 +32,10 @@ namespace st {
 	std::unordered_map<std::string, bool> window_states{
 		{"character", false },
 		{"property", true },
-		{"storyline", false },
+		{"storyline", true },
 		{"globalvars", false },
 		{"graphoverview", false },
-		{"nodecollection", false },
+		{"nodecollection", true },
 		{"actions", false },
 		{"right-click-menu", false }
 	};
@@ -44,7 +47,11 @@ namespace st {
 	bool node_moving = false;
 	sf::Vector2f move_offset;
 
+	//Node adding
+	Node* to_add;
+
 	sf::RenderWindow win;
 	sf::Clock clock;
+	sf::Font font;
 	};
 }

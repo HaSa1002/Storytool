@@ -8,14 +8,14 @@ namespace st {
 
 
 	App::App() {
-		win.create(sf::VideoMode::getDesktopMode(), "Storytool | "+project.name, sf::Style::Default);
+		win.create(sf::VideoMode::getDesktopMode(), "Storytool | " + project.name, sf::Style::Default);
 		ShowWindow(win.getSystemHandle(), SW_MAXIMIZE);
 		win.setFramerateLimit(60);
 		ImGui::SFML::Init(win);
 		ImGui::StyleColorsLight();
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.WindowBorderSize = 0.f;
-
+		font.loadFromFile("font.ttf");
 		main();
 	}
 	App::~App() {
@@ -26,14 +26,8 @@ namespace st {
 
 	void App::main() {
 		//Test stuff
-		sf::Font f;
-		f.loadFromFile("font.ttf");
-		project.graphs["New"] = Graph { "New", "New Graph", "It's a test graph" };
-		auto& nodes = project.graphs["New"].nodes;
-		nodes.insert({ "test", Node{ "test", "", "Test", f } });
-		nodes["test"].rendered_name.setCharacterSize(60);
-		nodes["test"].setPosition({ 400, 400 });
-		nodes["test"].shape.setFillColor(sf::Color::Cyan);
+
+
 		//End
 
 		while (win.isOpen()) {
@@ -46,6 +40,8 @@ namespace st {
 			win.clear({ 245, 245, 245 });
 			win.draw(project);
 			ImGui::SFML::Render(win);
+			if (to_add != nullptr)
+				win.draw(*to_add);
 			win.display();
 		}
 	}
@@ -64,11 +60,24 @@ namespace st {
 				case sf::Event::MouseButtonReleased:
 					switch (e.mouseButton.button) {
 						case sf::Mouse::Button::Right:
-							//Context menue
+							if (to_add != nullptr) {
+								//Cancel adding of node
+								to_add = nullptr;
+								break;
+							}
+							//Context menu
 							ImGui::SetWindowPos("right-click", sf::Mouse::getPosition());
 							window_states["right-click-menu"] = false; //FIXME: complete right-click menu
 							break;
 						case sf::Mouse::Button::Left: {
+								if (to_add != nullptr) {
+									//Add node
+									to_add->setPosition(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
+									project.addNode(to_add);
+									to_add = nullptr;
+									break;
+								}
+
 								//Disappear right-click menu if the click was not in a window
 								window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
 							//Select node
@@ -83,6 +92,11 @@ namespace st {
 
 					break;
 				case sf::Event::MouseMoved:
+					if (to_add != nullptr) {
+						//Move node
+						to_add->setPosition(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
+						break;
+					}
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !ImGui::IsAnyItemActive()) {
 						//We want to move a node or select a group of nodes
 						if (project.hasActiveNode()) {
@@ -107,6 +121,8 @@ namespace st {
 						win.setView(view);
 					}
 				skip:
+
+
 					last_mousePos.x = e.mouseMove.x;
 					last_mousePos.y = e.mouseMove.y;
 					break;
@@ -133,6 +149,7 @@ namespace st {
 						//view.setCenter(center);
 						win.setView(view);
 						break;
+
 					}
 
 				case sf::Event::KeyReleased:
@@ -155,7 +172,159 @@ namespace st {
 
 	}
 
+	void App::drawStorylineWindow() {
+		static ImGuiTextFilter filter;
+		static std::string id;
+		static std::string text;
+		if (ImGui::Begin("Storylines", &window_states["storyline"])) {
+			ImGui::InputText("ID Template", &project.storyline_id_template);
+			//TODO: Make helper
+			ImGui::Text("Vars: C = Character\nI = Counter\nG = Graph\nN = Node\nDefault: C-I");
+			ImGui::Separator();
+			ImGui::Separator();
+			//Add
+			ImGui::InputText("ID", &id);
+			ImGui::InputTextMultiline("Text", &text);
+			if (ImGui::Button("Add")) {
+				project.storyline[id] = text;
+				id.clear();
+				text.clear();
+			}
+			ImGui::Separator();
+			ImGui::Separator();
+			//TODO: Allow sort
+			filter.Draw("Filter");
+			ImGui::Separator();
+			for (auto& s : project.storyline) {
+				if (filter.PassFilter(s.first.data())) {
+					ImGui::InputTextMultiline(s.first.data(), &s.second);
+				}
+			}
+
+		}
+		ImGui::End();
+	}
+
+	void App::drawCharacterWindow() {
+		static std::string name;
+		static ImVec4 color;
+		static std::string description;
+		static std::string* n;
+		static std::string n_backup;
+		static bool modal;
+		if (ImGui::Begin("Characters", &window_states["character"])) {
+			ImGui::TreePush("Characters##c");
+			if (ImGui::TreeNode("New")) {
+				ImGui::InputText("Name", &name);
+				ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&color));
+				ImGui::InputTextMultiline("Description", &description);
+
+				if (ImGui::Button("Create")) {
+					project.characters.push_back({ name, description, color });
+					name.clear();
+					color = sf::Color::Black;
+					description.clear();
+				}
+				ImGui::TreePop();
+			}
+
+			for (auto& c : project.characters) {
+				ImGui::PushID(c.name.data());
+				if (ImGui::TreeNode(c.name.data())) {
+					ImGui::InputText("Name", &c.name, ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
+					if (ImGui::Button("Rename")) {
+						n = &c.name;
+						n_backup = c.name;
+						modal = true;
+						ImGui::OpenPopup("Rename Char");
+					}
+					ImGui::InputTextMultiline("Description", &c.description);
+					ImVec4 c_t = c.color;
+					if (ImGui::ColorEdit4("Color", reinterpret_cast<float*>(&c_t))) {
+						c.color = c_t;
+					}
+					ImGui::TreePop();
+				}
+				ImGui::PopID();
+			}
+			ImGui::TreePop();
+
+
+		}
+		if (modal) {
+			ImGui::OpenPopup("Rename Char");
+			if (ImGui::BeginPopupModal("Rename Char", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
+				ImGui::InputText("Name", n);
+				if (ImGui::Button("Rename")) {
+					modal = false;
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel")) {
+					*n = n_backup;
+					modal = false;
+					ImGui::CloseCurrentPopup();
+				}
+			}
+			ImGui::EndPopup();
+		}
+		ImGui::End();
+		//TODO: Write Rename model
+	}
+
+	void App::drawNodeCollection() {
+		static std::string name;
+		static std::string d_text;
+		static std::string i_a;
+		static std::string a_e;
+		static ImVec4 bg_color;
+		static ImVec4 t_color;
+		static std::string character;
+		if (ImGui::Begin("Node Collection", &window_states["nodecollection"])) {
+			if (ImGui::CollapsingHeader("Add")) {
+				ImGui::InputText("Name", &name);
+				ImGui::InputText("Text", &d_text);
+				ImGui::InputTextMultiline("STS is_activated", &i_a);
+				ImGui::InputTextMultiline("STS after_execute", &a_e);
+				ImGui::ColorEdit4("Fill Color", reinterpret_cast<float*>(&bg_color));
+				ImGui::ColorEdit4("Text Color", reinterpret_cast<float*>(&t_color));
+				if (ImGui::BeginCombo("Character", character.data())) {
+					for (auto& c : project.characters) {
+						if (ImGui::Selectable(c.name.data()))
+							character = c.name;
+					}
+					ImGui::EndCombo();
+				}
+
+				if (ImGui::Button("Add##insert")) {
+					project.def_nodes.insert_or_assign(name, Node { name, character, d_text, font, bg_color, t_color, i_a, a_e });
+
+				}
+			}
+
+			if (ImGui::CollapsingHeader("Collection")) {
+				for (auto& i : project.def_nodes) {
+					Node& n = i.second;
+					ImGui::PushStyleColor(ImGuiCol_Button, n.shape.getFillColor());
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, n.shape.getFillColor());
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, n.shape.getFillColor());
+					ImGui::PushStyleColor(ImGuiCol_Text, n.rendered_name.getFillColor());
+					if (ImGui::Button(n.id.data())) {
+						//TODO: Add node to cursor
+						to_add = &n;
+						to_add->setPosition(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
+
+					}
+					ImGui::PopStyleColor(4);
+				}
+			}
+		}
+		ImGui::End();
+	}
+
 	void App::drawPropertyEditor() {
+		static std::string sid;
+		static std::string text;
 		static std::string buff;
 		static sf::Color res_color;
 		static std::string msg;
@@ -215,6 +384,22 @@ namespace st {
 						msg1 = e.what();
 					}
 				}
+				if (sid.empty()) {
+					sid = project.proposeStorylineID();
+				}
+				ImGui::InputText("ID", &sid);
+				ImGui::InputTextMultiline("Text##t", &text);
+				if (ImGui::Button("Add")) {
+					project.addStoryline(text, sid);
+					n.storylines.insert(sid);
+					sid.clear();
+					text.clear();
+				}
+				ImGui::PushID("sline");
+				for (auto& s : n.storylines) {
+					ImGui::InputTextMultiline(s.data(), &project.storyline[s]);
+				}
+				ImGui::PopID();
 
 			}
 		}
@@ -247,6 +432,9 @@ namespace st {
 		if (window_states["globalvars"]) drawGlobalsWindow();
 		if (window_states["property"]) drawPropertyEditor();
 		if (window_states["right-click-menu"]) drawRightClickMenu();
+		if (window_states["nodecollection"]) drawNodeCollection();
+		if (window_states["character"]) drawCharacterWindow();
+		if (window_states["storyline"]) drawStorylineWindow();
 
 
 	}
@@ -320,27 +508,27 @@ namespace st {
 
 			if (ImGui::BeginMenu("View")) {
 				if (ImGui::MenuItem("Node Collection")) {
-
+					window_states["nodecollection"] = !window_states["nodecollection"];
 				}
-				if (ImGui::MenuItem("Graph Overview")) {
-
+				if (ImGui::MenuItem("Property Editor")) {
+					window_states["property"] = !window_states["property"];
 				}
 
 				ImGui::Separator();
-				if (ImGui::MenuItem("Global Var Window")) {
+				if (ImGui::MenuItem("Graph Overview")) {
+
+				}
+				if (ImGui::MenuItem("Global Variables")) {
 					window_states["globalvars"] = !window_states["globalvars"];
 				}
-				if (ImGui::MenuItem("Storyline Window")) {
+				if (ImGui::MenuItem("Storylines")) {
+					window_states["storyline"] = !window_states["storyline"];
+				}
+				if (ImGui::MenuItem("ST Script")) {
 
 				}
-				if (ImGui::MenuItem("Actions Window")) {
-
-				}
-				if (ImGui::MenuItem("Character Window")) {
+				if (ImGui::MenuItem("Characters")) {
 					window_states["character"] = !window_states["character"];
-				}
-				if (ImGui::MenuItem("Property Window")) {
-					window_states["property"] = !window_states["property"];
 				}
 				ImGui::EndMenu();
 			}
@@ -386,7 +574,7 @@ namespace st {
 			}
 			ImGui::TreePush("vars");
 			for (auto& i : project.global_vars) {
-					ImGui::InputDouble(i.first.data(), &i.second);
+				ImGui::InputDouble(i.first.data(), &i.second);
 				//if (ImGui::TreeNode(i.first.data())) {
 					//FIXME: Seperate Init Value and Current value (if in sim)
 					//TODO: Add Delete
