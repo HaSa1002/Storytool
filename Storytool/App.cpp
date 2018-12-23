@@ -354,6 +354,18 @@ namespace st {
 				if (ImGui::ColorEdit4("Text Color", (float*)&c_temp)) {
 					n.rendered_name.setFillColor(c_temp);
 				}
+				ImGui::PushID("character");
+				if (ImGui::BeginCombo("Character", n.character.data())) {
+					for (auto& c : project.characters) {
+						if (ImGui::Selectable(c.name.data())) {
+							n.character = c.name;
+						}
+					}
+
+					ImGui::EndCombo();
+				}
+				ImGui::PopID();
+
 				ImGui::Separator();
 				if (ImGui::InputTextMultiline("Check activation (STS)", &n.is_activated)) {
 					msg.clear();
