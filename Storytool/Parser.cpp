@@ -240,7 +240,7 @@ namespace st {
 			} else {
 				//Check for normal assign operator (=)
 				p = s.find_first_of('=');
-				if (p == std::string::npos) return; //TODO: Make more elegant
+				if (p == std::string::npos) throw std::invalid_argument("Unexpected variable found. What to do with it?"); //TODO: Make more elegant
 				std::string var { getVariableName(s.substr(0, p)) };
 				std::string temp { s.substr(p + 1) };
 				double res = calculateMath(temp, globals, locals);
@@ -358,7 +358,8 @@ namespace st {
 				//4. -=
 				//5. =
 				setVar(executing, globals, vars);
-
+				if (!executing.empty())
+					throw std::invalid_argument("Unexpected symbol(s) left. Is a ';' missing?");
 
 			}
 

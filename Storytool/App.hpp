@@ -28,7 +28,7 @@ namespace st {
 	private:
 	std::unordered_map<std::string, bool> window_states{
 		{"character", false },
-		{"property", false },
+		{"property", true },
 		{"storyline", false },
 		{"globalvars", false },
 		{"graphoverview", false },

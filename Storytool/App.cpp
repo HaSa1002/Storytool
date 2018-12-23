@@ -40,7 +40,7 @@ namespace st {
 			update();
 			ImGui::ShowDemoWindow();
 
-			
+
 
 			win.clear({ 245, 245, 245 });
 			win.draw(project);
@@ -94,7 +94,7 @@ namespace st {
 								}
 							}
 							auto p = sf::Mouse::getPosition(win);
-							project.moveNode(win.mapPixelToCoords(p)-move_offset);
+							project.moveNode(win.mapPixelToCoords(p) - move_offset);
 						}
 
 					} else if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
@@ -105,11 +105,15 @@ namespace st {
 
 						win.setView(view);
 					}
-					skip:
+				skip:
 					last_mousePos.x = e.mouseMove.x;
 					last_mousePos.y = e.mouseMove.y;
 					break;
 				case sf::Event::MouseWheelScrolled: {
+						if (ImGui::IsAnyItemActive()) {
+							//TODO: Don't zoom if we are in a menu
+							break;
+						}
 						auto& s = e.mouseWheelScroll;
 						auto view = win.getView();
 						//Set the center to the cursor, to zoom at the cursor (feels better/normal)
@@ -151,19 +155,72 @@ namespace st {
 	}
 
 	void App::drawPropertyEditor() {
-	static std::string buff;
-	Node& n = *project.active;
+		static std::string buff;
+		static sf::Color res_color;
+		static std::string msg;
+		static sf::Color res_color1;
+		static std::string msg1;
+		Node& n = *project.active;
 		if (ImGui::Begin("Property Editor", &window_states["property"])) {
 			if (!project.hasActiveNode()) {
 				ImGui::Text("No Node selected.");
 				goto end;
 			}
-			buff = n.rendered_name.getString();
-			if (ImGui::InputText("Text", &buff)) {
-				n.setDisplayString(buff);
+			std::string node_name = "Node (" + n.id + ")";
+			if (ImGui::CollapsingHeader(node_name.data())) {
+				buff = n.rendered_name.getString();
+				if (ImGui::InputTextMultiline("Text", &buff)) {
+					n.setDisplayString(buff);
+				}
+				float pos_temp[2] = { n.getPosition().x, n.getPosition().y };
+				if (ImGui::InputFloat2("Positon (x,y)", pos_temp, "%.0f")) {
+					n.setPosition({ pos_temp[0], pos_temp[1] });
+				}
+				ImVec4 bg_temp = n.shape.getFillColor();
+				if (ImGui::ColorEdit4("Fill Color", (float*)&bg_temp)) {
+					n.shape.setFillColor(bg_temp);
+				}
+				ImVec4 c_temp = n.rendered_name.getFillColor();
+				if (ImGui::ColorEdit4("Text Color", (float*)&c_temp)) {
+					n.rendered_name.setFillColor(c_temp);
+				}
+				ImGui::Separator();
+				if (ImGui::InputTextMultiline("Check activation (STS)", &n.is_activated)) {
+					msg.clear();
+				}
+				ImGui::TextColored(res_color, msg.data());
+				if (ImGui::Button("Syntax check##i_a")) {
+					try {
+						GlobalVars g_copy = project.global_vars;
+						bool ret = script::run(n.is_activated, g_copy);
+						res_color = sf::Color::Green;
+						msg = "Test passed (return: ";
+						msg += std::to_string(ret) + ").";
+					} catch (std::invalid_argument e) {
+						res_color = sf::Color::Red;
+						msg = e.what();
+					}
+				}
+				ImGui::InputTextMultiline("After execution (STS)", &n.after_execute);
+				ImGui::TextColored(res_color1, msg1.data());
+				if (ImGui::Button("Syntax check##a_e")) {
+					try {
+						GlobalVars g_copy = project.global_vars;
+						script::run(n.is_activated, g_copy);
+						res_color1 = sf::Color::Green;
+						msg1 = "Test passed.";
+					} catch (std::invalid_argument e) {
+						res_color1 = sf::Color::Red;
+						msg1 = e.what();
+					}
+				}
+
 			}
 		}
-		end:
+	end:
+		if (ImGui::CollapsingHeader("Graph")) {
+
+		}
 		ImGui::End();
 	}
 
@@ -328,13 +385,13 @@ namespace st {
 			}
 			ImGui::TreePush("vars");
 			for (auto& i : project.global_vars) {
-				if (ImGui::TreeNode(i.first.data())) {
-					ImGui::InputDouble("Value", &i.second);
+					ImGui::InputDouble(i.first.data(), &i.second);
+				//if (ImGui::TreeNode(i.first.data())) {
 					//FIXME: Seperate Init Value and Current value (if in sim)
 					//TODO: Add Delete
 
-					ImGui::TreePop();
-				}
+					//ImGui::TreePop();
+				//}
 			}
 			ImGui::TreePop();
 		}
