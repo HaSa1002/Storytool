@@ -116,9 +116,6 @@
     <ClInclude Include="Config.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="NodeSet.hpp">
-      <Filter>Headerdateien\nodes</Filter>
-    </ClInclude>
     <ClInclude Include="Character.hpp">
       <Filter>Headerdateien\character</Filter>
     </ClInclude>

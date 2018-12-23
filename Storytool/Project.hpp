@@ -1,7 +1,6 @@
 #pragma once
 #include "Config.hpp"
 #include "Character.hpp"
-#include "NodeSet.hpp"
 #include "Graph.hpp"
 #include "Parser.hpp"
 
