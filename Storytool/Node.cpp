@@ -35,6 +35,11 @@ bool st::Node::isHovered(const sf::Vector2f & mouse_pos) {
 	return false;
 }
 
+void st::Node::checkSTS(GlobalVars& globals) { 
+	script::run(is_activated, globals);
+	script::run(after_execute, globals);
+}
+
 sf::Vector2f st::Node::getPosition() {
 	auto bounds = rendered_name.getGlobalBounds();
 	sf::extrude<float>(bounds, offset);

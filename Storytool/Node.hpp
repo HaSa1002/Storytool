@@ -1,6 +1,7 @@
 #pragma once
 #include "Config.hpp"
 #include "SfmlHelper.hpp"
+#include "Parser.hpp"
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -39,6 +40,7 @@ namespace st {
 		void setPosition(const sf::Vector2f& position); //sets the position and calls correctTransforms
 		void setDisplayString(const std::string& string); //sets the displayed string and calls correctTransforms
 		bool isHovered(const sf::Vector2f& mouse_pos);
+		void checkSTS(GlobalVars& globals);
 		sf::Vector2f getPosition();
 
 	};
