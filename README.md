@@ -3,6 +3,17 @@
 The goal is to create a tool to help storymakers to write branching and complex stories.
 
 This project is currently under development and the list below may change during development.
+
+## Dependencies ##
+- [SFML 2.5.1](https://www.sfml-dev.org/download/sfml/2.5.1)
+- [XML Filestreams](https://github.com/HaSa1002/xml-filestreams)
+
+## Credits ##
+- [ImGui](https://github.com/ocornut/imgui)
+- [ImGui-SFML](https://github.com/eliasdaler/imgui-sfml)
+
+# Features #
+
 I am sorry,  but in the GitHub Preview is the following list unsatisfying, since each Feature has a unique number.
 
 **Last Update: 23.12.2018**
