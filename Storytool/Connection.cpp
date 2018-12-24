@@ -1,7 +1,10 @@
 #include "Connection.hpp"
 
 namespace st {
-//FIXME: Use also GlobalBounds to find the perfect starting position
+	Connection::Connection(Node & s, Node & e) { 
+		update(s, e);
+	}
+	//FIXME: Use also GlobalBounds to find the perfect starting position
 	void Connection::update(Node & n_start, Node & n_end) {
 		sf::Vector2f s = n_start.getPosition();
 		sf::Vector2f e = n_end.getPosition();

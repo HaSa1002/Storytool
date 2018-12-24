@@ -4,6 +4,7 @@
 
 namespace st {
 	struct Connection : sf::Drawable {
+		Connection(Node& s, Node& e);
 		sf::Vector2f start;
 		sf::Vector2f end;
 		sf::VertexArray line{sf::PrimitiveType::LineStrip, 6 };
