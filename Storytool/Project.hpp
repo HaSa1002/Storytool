@@ -43,6 +43,7 @@ namespace st {
 		void addNode(const Node* node);
 		void deleteNode(const std::string& id);
 		void deselectNode();
+		void addConnection(const std::string& start, const std::string& end);
 
 		//Drawing
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;

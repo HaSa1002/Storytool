@@ -97,6 +97,11 @@ namespace st {
 		active = nullptr;
 	}
 
+	void Project::addConnection(const std::string & start, const std::string & end) { 
+		if (current_graph == nullptr) return;
+		current_graph->addConnection(start, end);
+	}
+
 	void Project::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 		for (auto& graph : graphs)
 			target.draw(graph.second);
