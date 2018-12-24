@@ -50,8 +50,17 @@ namespace st {
 	//Node adding
 	Node* to_add;
 
+	//Connection line stuff
+	sf::VertexArray line{sf::PrimitiveType::LineStrip, 2 };
+	bool connecting_nodes = false;
+	std::string start_node;
+
 	sf::RenderWindow win;
 	sf::Clock clock;
 	sf::Font font;
+
+	//Doubleclick detection
+	sf::Time doubleClickTime;
+	sf::Time last_click;
 	};
 }

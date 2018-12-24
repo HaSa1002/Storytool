@@ -1,5 +1,7 @@
 #include "App.hpp"
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 #include "imgui_stdlib.h"
 #include <iostream>
 
@@ -9,7 +11,16 @@ namespace st {
 
 	App::App() {
 		win.create(sf::VideoMode::getDesktopMode(), "Storytool | " + project.name, sf::Style::Default);
+#ifdef _WIN32
+//Maximize Window
 		ShowWindow(win.getSystemHandle(), SW_MAXIMIZE);
+		//Set DoubleClickTime
+		doubleClickTime = sf::milliseconds(GetDoubleClickTime());
+#else
+		//Set Doubleclicktime a custom value
+		doubleClickTime = sf::milliseconds(500);
+
+#endif // _WIN32
 		win.setFramerateLimit(60);
 		ImGui::SFML::Init(win);
 		ImGui::StyleColorsLight();
@@ -34,7 +45,7 @@ namespace st {
 			processEvents();
 			update();
 			ImGui::ShowDemoWindow();
-
+			
 
 
 			win.clear({ 245, 245, 245 });
@@ -42,6 +53,8 @@ namespace st {
 			ImGui::SFML::Render(win);
 			if (to_add != nullptr)
 				win.draw(*to_add);
+			if (connecting_nodes)
+				win.draw(line);
 			win.display();
 		}
 	}
@@ -70,6 +83,7 @@ namespace st {
 							window_states["right-click-menu"] = false; //FIXME: complete right-click menu
 							break;
 						case sf::Mouse::Button::Left: {
+							
 								if (to_add != nullptr) {
 									//Add node
 									to_add->setPosition(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
@@ -84,6 +98,22 @@ namespace st {
 								if (!ImGui::IsAnyItemActive())
 									project.selectNode(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
 								node_moving = false;
+								if (!connecting_nodes) {
+								if (clock.getElapsedTime() - last_click < doubleClickTime) {
+									if (project.hasActiveNode()) {
+										line[0].position = project.active->getPosition();
+										connecting_nodes = true;
+										start_node = project.active->id;
+									}
+								}
+
+								} else {
+									if (project.hasActiveNode()) {
+										project.addConnection(start_node, project.active->id);
+										connecting_nodes = false;
+									}
+								}
+								last_click = clock.getElapsedTime();
 								break;
 							}
 						default:
@@ -96,6 +126,10 @@ namespace st {
 						//Move node
 						to_add->setPosition(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
 						break;
+					}
+					if (connecting_nodes) {
+						line[1].position = win.mapPixelToCoords(sf::Mouse::getPosition(win));
+					break;
 					}
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !ImGui::IsAnyItemActive()) {
 						//We want to move a node or select a group of nodes
