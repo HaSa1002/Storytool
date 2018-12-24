@@ -15,7 +15,7 @@ namespace st {
 		std::string description;
 
 		std::unordered_map<st::id, Node> nodes;
-		std::unordered_map<std::pair<std::string, std::string>, Connection> connections;
+		std::map<std::pair<std::string, std::string>, Connection> connections;
 		size_t node_id = 0;
 		Node* hitNode(const sf::Vector2f& pos);
 
@@ -23,6 +23,7 @@ namespace st {
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 		void addNode(const Node* node);
 		void deleteNode(const std::string& id);
+		void addConnection(const std::string& start, const std::string& end);
 
 	};
 }

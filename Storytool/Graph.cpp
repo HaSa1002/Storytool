@@ -10,7 +10,7 @@ namespace st {
 		return nullptr;
 	}
 
-	void Graph::update() { 
+	void Graph::update() {
 		for (auto i : connections) {
 			auto start = nodes.find(i.first.first);
 			auto end = nodes.find(i.first.second);
@@ -39,7 +39,13 @@ namespace st {
 		n.id = std::to_string(++node_id);
 		nodes.insert({ n.id, n });
 	}
-	void Graph::deleteNode(const std::string & id) { 
+	void Graph::deleteNode(const std::string & id) {
 		nodes.erase(id);
 	}
-}
+	void Graph::addConnection(const std::string & start, const std::string & end) {
+		auto s = nodes.find(start);
+		auto e = nodes.find(end);
+		if (s == nodes.end() || e == nodes.end()) return;
+		connections.emplace(std::make_pair(std::make_pair(start, end), Connection{s->second, e->second }));
+		}
+	}
