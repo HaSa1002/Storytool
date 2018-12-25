@@ -78,6 +78,9 @@ namespace st {
 								to_add = nullptr;
 								break;
 							}
+							if (connecting_nodes) {
+								connecting_nodes = false;
+							}
 							//Context menu
 							ImGui::SetWindowPos("right-click", sf::Mouse::getPosition());
 							window_states["right-click-menu"] = false; //FIXME: complete right-click menu

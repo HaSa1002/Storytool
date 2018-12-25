@@ -15,8 +15,10 @@ namespace st {
 		sf::Vector2f s = n_start.getPosition();
 		sf::Vector2f e = n_end.getPosition();
 		if (s == start && e == end) return; //No update required
-		std::cout << "Start: Old: (" << start.x << '|' << start.y << ") New: (" << s.x << '|' << s.y << ')' <<
-		"\nEnd: Old: (" << end.x << '|' << end.y << ") New: (" << e.x << '|' << e.y << ")\n";
+		auto s_b = n_start.shape.getGlobalBounds();
+		auto e_b = n_end.shape.getGlobalBounds();
+		s += { s_b.width/2, s_b.height};
+		e += { e_b.width/2, 0};
 		
 		start = s;
 		end = e;
@@ -30,6 +32,9 @@ namespace st {
 		line[5].position = e;
 		line[4].position = { e.x, line[2].position.y };
 		line[3].position = line[4].position;
+		for (size_t i = 0; i < line.getVertexCount(); ++i) {
+			line[i].color = sf::Color::Black;
+		}
 
 	}
 
