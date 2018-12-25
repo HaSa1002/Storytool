@@ -1,15 +1,25 @@
 #include "Connection.hpp"
+#include <iostream>
 
 namespace st {
-	Connection::Connection(Node & s, Node & e) { 
+	Connection::Connection(Node & s, Node & e) {
+		s_n = s.id;
+		e_n = e.id;
 		update(s, e);
+	}
+	bool Connection::is(const std::string & start, const std::string & end) {
+		return start == s_n && end == e_n;
 	}
 	//FIXME: Use also GlobalBounds to find the perfect starting position
 	void Connection::update(Node & n_start, Node & n_end) {
 		sf::Vector2f s = n_start.getPosition();
 		sf::Vector2f e = n_end.getPosition();
 		if (s == start && e == end) return; //No update required
-
+		std::cout << "Start: Old: (" << start.x << '|' << start.y << ") New: (" << s.x << '|' << s.y << ')' <<
+		"\nEnd: Old: (" << end.x << '|' << end.y << ") New: (" << e.x << '|' << e.y << ")\n";
+		
+		start = s;
+		end = e;
 		//Start
 		line[0].position = s;
 		line[1].position = s;
@@ -21,8 +31,6 @@ namespace st {
 		line[4].position = { e.x, line[2].position.y };
 		line[3].position = line[4].position;
 
-		start = s;
-		end = e;
 	}
 
 	void Connection::draw(sf::RenderTarget & target, sf::RenderStates) const {

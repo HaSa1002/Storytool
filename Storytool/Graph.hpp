@@ -15,7 +15,7 @@ namespace st {
 		std::string description;
 
 		std::unordered_map<st::id, Node> nodes;
-		std::map<std::pair<std::string, std::string>, Connection> connections;
+		std::vector<Connection> connections;
 		size_t node_id = 0;
 		Node* hitNode(const sf::Vector2f& pos);
 

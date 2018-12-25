@@ -11,14 +11,14 @@ namespace st {
 	}
 
 	void Graph::update() {
-		for (auto i : connections) {
-			auto start = nodes.find(i.first.first);
-			auto end = nodes.find(i.first.second);
+		for (auto& i : connections) {
+			auto start = nodes.find(i.s_n);
+			auto end = nodes.find(i.e_n);
 			if (start == nodes.end() || end == nodes.end()) {
-				connections.erase(i.first);
+				
 				continue;
 			}
-			i.second.update(start->second, end->second);
+			i.update(nodes[i.s_n], nodes[i.e_n]);
 		}
 	}
 
@@ -29,7 +29,7 @@ namespace st {
 		}
 		//Draw connections
 		for (auto& i : connections) {
-			target.draw(i.second);
+			target.draw(i);
 		}
 
 		//Draw headline
@@ -43,9 +43,10 @@ namespace st {
 		nodes.erase(id);
 	}
 	void Graph::addConnection(const std::string & start, const std::string & end) {
-		auto s = nodes.find(start);
-		auto e = nodes.find(end);
-		if (s == nodes.end() || e == nodes.end()) return;
-		connections.emplace(std::make_pair(std::make_pair(start, end), Connection{s->second, e->second }));
+		for (auto& i : connections) {
+			if (i.is(start, end)) return; //Don't do double inserts;
+			//TODO: Use seperate container to check if connection exists
+		}
+		connections.push_back({nodes[start], nodes[end] });
 		}
 	}
