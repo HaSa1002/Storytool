@@ -16,15 +16,9 @@ This project is currently under development and the list below may change during
 
 I am sorry,  but in the GitHub Preview is the following list unsatisfying, since each Feature has a unique number.
 
-**Last Update: 23.12.2018**
+**Last Update: 25.12.2018**
 
 ## Planned Features
-2 Tree View (Flowchart)
-
-4 Branching
-
-5 Multiple Graphs per Project
-
 12 Export Graphs to PNG and HTML/MD/TXT (real script)
 
 13 Team Collaboration
@@ -36,7 +30,7 @@ I am sorry,  but in the GitHub Preview is the following list unsatisfying, since
 20 Contextual Right click menu
 
 ## In Progress
-6 Connections between graphs
+5 Multiple Graphs per Project
 
 16 Graphs
 
@@ -47,7 +41,13 @@ I am sorry,  but in the GitHub Preview is the following list unsatisfying, since
 ## To be improved (Done first stage)
 1 Storylines (You can write the script)
 
+2 Tree View (Flowchart)
+
 3 Nodes
+
+4 Branching
+
+6 Connections between graphs
 
 7 Global Variables to save Stats
 
