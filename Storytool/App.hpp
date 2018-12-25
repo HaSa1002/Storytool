@@ -61,6 +61,6 @@ namespace st {
 
 	//Doubleclick detection
 	sf::Time doubleClickTime;
-	sf::Time last_click;
+	sf::Time last_click = sf::Time::Zero;
 	};
 }

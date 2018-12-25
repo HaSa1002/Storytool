@@ -12,7 +12,7 @@ namespace st {
 	App::App() {
 		win.create(sf::VideoMode::getDesktopMode(), "Storytool | " + project.name, sf::Style::Default);
 #ifdef _WIN32
-//Maximize Window
+		//Maximize Window
 		ShowWindow(win.getSystemHandle(), SW_MAXIMIZE);
 		//Set DoubleClickTime
 		doubleClickTime = sf::milliseconds(GetDoubleClickTime());
@@ -45,7 +45,7 @@ namespace st {
 			processEvents();
 			update();
 			ImGui::ShowDemoWindow();
-			
+
 
 
 			win.clear({ 245, 245, 245 });
@@ -83,7 +83,7 @@ namespace st {
 							window_states["right-click-menu"] = false; //FIXME: complete right-click menu
 							break;
 						case sf::Mouse::Button::Left: {
-							
+
 								if (to_add != nullptr) {
 									//Add node
 									to_add->setPosition(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
@@ -94,26 +94,26 @@ namespace st {
 
 								//Disappear right-click menu if the click was not in a window
 								window_states["right-click-menu"] = false;//FIXME: right-click menu disappearing
-							//Select node
-								if (!ImGui::IsAnyItemActive())
-									project.selectNode(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
 								node_moving = false;
-								if (!connecting_nodes) {
-								if (clock.getElapsedTime() - last_click < doubleClickTime) {
-									if (project.hasActiveNode()) {
-										line[0].position = project.active->getPosition();
-										connecting_nodes = true;
-										start_node = project.active->id;
-									}
-								}
+								//Select node
+								if (!ImGui::IsAnyItemActive() && !ImGui::IsAnyItemFocused()) {
+									project.selectNode(win.mapPixelToCoords(sf::Mouse::getPosition(win)));
+									if (!connecting_nodes) {
+										if (last_click < doubleClickTime) {
+											if (project.hasActiveNode()) {
+												line[0].position = project.active->getPosition();
+												connecting_nodes = true;
+												start_node = project.active->id;
 
-								} else {
-									if (project.hasActiveNode()) {
+											}
+										}
+										last_click = sf::Time::Zero;
+									} else if (project.hasActiveNode()) {
 										project.addConnection(start_node, project.active->id);
 										connecting_nodes = false;
 									}
+
 								}
-								last_click = clock.getElapsedTime();
 								break;
 							}
 						default:
@@ -129,9 +129,13 @@ namespace st {
 					}
 					if (connecting_nodes) {
 						line[1].position = win.mapPixelToCoords(sf::Mouse::getPosition(win));
-					break;
+						break;
 					}
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !ImGui::IsAnyItemActive()) {
+						if (!project.hasActiveNode()) {
+							project.selectNode(win.mapPixelToCoords({e.mouseMove.x, e.mouseMove.y }));
+							node_moving = false;
+						}
 						//We want to move a node or select a group of nodes
 						if (project.hasActiveNode()) {
 							if (!node_moving) {
@@ -198,8 +202,11 @@ namespace st {
 					break;
 			}
 		}
+		//Add to double click time
+		last_click += clock.getElapsedTime();
 	}
 	void App::update() {
+		project.update();
 		ImGui::SFML::Update(win, clock.restart());
 		mainMenuBar();
 		draw();
