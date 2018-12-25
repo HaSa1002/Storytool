@@ -47,6 +47,7 @@ namespace st {
 
 		//Drawing
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+		void update();
 
 	};
 }

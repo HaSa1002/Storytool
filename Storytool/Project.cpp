@@ -107,4 +107,10 @@ namespace st {
 			target.draw(graph.second);
 	}
 
+	void Project::update() { 
+		if (current_graph != nullptr) {
+			current_graph->update();
+		}
+	}
+
 }
