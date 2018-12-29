@@ -1,13 +1,13 @@
 #include "Project.hpp"
 
 namespace st {
-	Project::Project(const std::string & path) {
+	Project::Project(const std::string & path, sf::Font* font) : font { font } {
 		load(path);
 	}
-		
+
 
 	const std::string Project::proposeStorylineID() {
-		
+
 		std::string res = storyline_id_template;
 		size_t c = res.find_first_of('C');
 		if (c != std::string::npos) {
@@ -88,7 +88,7 @@ namespace st {
 		}
 	}
 
-	void Project::deleteNode(const std::string & id) { 
+	void Project::deleteNode(const std::string & id) {
 		if (active->id == id) active = nullptr;
 		current_graph->deleteNode(id);
 	}
@@ -97,17 +97,17 @@ namespace st {
 		active = nullptr;
 	}
 
-	void Project::addConnection(const std::string & start, const std::string & end) { 
+	void Project::addConnection(const std::string & start, const std::string & end) {
 		if (current_graph == nullptr) return;
 		current_graph->addConnection(start, end);
 	}
 
 	void Project::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 		for (auto& graph : graphs)
-			target.draw(graph.second);
+			graph.second.draw(target, states, graphs);
 	}
 
-	void Project::update() { 
+	void Project::update() {
 		if (current_graph != nullptr) {
 			current_graph->update();
 		}

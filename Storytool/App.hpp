@@ -32,11 +32,10 @@ namespace st {
 	std::unordered_map<std::string, bool> window_states{
 		{"character", false },
 		{"property", true },
-		{"storyline", true },
+		{"storyline", false },
 		{"globalvars", false },
 		{"graphoverview", false },
 		{"nodecollection", true },
-		{"actions", false },
 		{"right-click-menu", false }
 	};
 

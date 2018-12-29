@@ -2,6 +2,17 @@
 
 namespace st {
 
+	Graph::Graph(sf::Font* font)
+		:Graph { "UntitledGraph", "Untitled Graph", "", font } { }
+
+
+	Graph::Graph(const std::string& id, const std::string& headline, const std::string& description, sf::Font* font)
+		: id { id },
+		description { description },
+		font { font },
+		headline { headline, *font } { }
+
+
 	Node* Graph::hitNode(const sf::Vector2f& pos) {
 		for (auto& i : nodes) {
 			if (i.second.isHovered(pos))
@@ -15,7 +26,7 @@ namespace st {
 			auto start = nodes.find(i.s_n);
 			auto end = nodes.find(i.e_n);
 			if (start == nodes.end() || end == nodes.end()) {
-				
+
 				continue;
 			}
 			i.update(nodes[i.s_n], nodes[i.e_n]);
@@ -23,13 +34,30 @@ namespace st {
 	}
 
 	//FIXME: Draw list
-	void Graph::draw(sf::RenderTarget & target, sf::RenderStates states) const {
+	//FIXME: Global Bounds Graph
+	//FIMXE: Center Headline
+	//FIXME: Draw Bounds
+	void Graph::draw(sf::RenderTarget & target, sf::RenderStates states, const std::unordered_map<st::id, Graph>& graphs) const {
 		for (auto& n : nodes) {
-			target.draw(n.second);
+			target.draw(n.second, states);
+		}
+		for (auto g : sub_graphs) {
+			sf::RenderStates current { states };
+			sf::Transformable t;
+			t.setPosition(g.second);
+			current.transform *= t.getTransform();
+			try {
+				const Graph& sg = graphs.at(g.first);
+				sg.draw(target, current, graphs);
+				target.draw(sg.headline);
+			} catch (std::out_of_range) {
+				//Graph doesn't exists
+				target.draw(sf::Text { "Graph \"" + g.first + "\" doesn't exists!", *font }, current);
+			}
 		}
 		//Draw connections
 		for (auto& i : connections) {
-			target.draw(i);
+			target.draw(i, states);
 		}
 
 		//Draw headline
@@ -47,6 +75,6 @@ namespace st {
 			if (i.is(start, end)) return; //Don't do double inserts;
 			//TODO: Use seperate container to check if connection exists
 		}
-		connections.push_back({nodes[start], nodes[end] });
-		}
+		connections.push_back({ nodes[start], nodes[end] });
 	}
+}

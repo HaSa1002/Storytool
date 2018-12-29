@@ -6,16 +6,17 @@
 
 namespace st {
 	struct Project : public sf::Drawable {
-	Project() :name{"Untitled Project"} {
-		graphs["main"] = Graph{"main", "", "The main Graph in the project." };
-		current_graph = &graphs["main"];
-	};
-	Project(const std::string& path);
+		Project(sf::Font* font) :name { "Untitled Project" }, font { font } {
+			graphs["main"] = Graph{ "main", "", "The main Graph in the project.", font };
+			current_graph = &graphs["main"];
+		};
+		Project(const std::string& path, sf::Font* font);
 		std::string name;
 		std::unordered_map<id, Node> def_nodes;
 		std::unordered_map<id, Graph> graphs;
 		std::vector<Character> characters;
 		GlobalVars global_vars;
+		sf::Font* font;
 
 		//Storyline
 		//FIXME: Add counter var, add addStoryline(id, text) method;
@@ -25,7 +26,7 @@ namespace st {
 		const std::string proposeStorylineID();
 		void addStoryline(const std::string& text);
 		void addStoryline(const std::string& text, const std::string& id);
-		
+
 
 		id main_graph;
 
@@ -36,7 +37,7 @@ namespace st {
 
 		//Input Handler Functions
 		Node* active = nullptr;
-		Graph* current_graph= nullptr;
+		Graph* current_graph = nullptr;
 		bool hasActiveNode();
 		void moveNode(const sf::Vector2f& dest);
 		void selectNode(const sf::Vector2f& pos);

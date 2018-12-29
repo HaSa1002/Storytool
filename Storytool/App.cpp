@@ -9,7 +9,7 @@ namespace st {
 
 
 
-	App::App() {
+	App::App() : project { &font } {
 		win.create(sf::VideoMode::getDesktopMode(), "Storytool | " + project.name, sf::Style::Default);
 #ifdef _WIN32
 		//Maximize Window
@@ -136,7 +136,7 @@ namespace st {
 					}
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !ImGui::IsAnyItemActive()) {
 						if (!project.hasActiveNode()) {
-							project.selectNode(win.mapPixelToCoords({e.mouseMove.x, e.mouseMove.y }));
+							project.selectNode(win.mapPixelToCoords({ e.mouseMove.x, e.mouseMove.y }));
 							node_moving = false;
 						}
 						//We want to move a node or select a group of nodes
@@ -184,7 +184,7 @@ namespace st {
 							view.zoom(1.3f);
 						} else if (s.delta > 0 && zoomfactor > 0.125f) {
 							zoomfactor -= 0.3f;
-							view.zoom(1/1.3f);
+							view.zoom(1 / 1.3f);
 						}
 						//Reset the center
 						//view.setCenter(center);
