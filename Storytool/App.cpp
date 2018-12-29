@@ -178,13 +178,13 @@ namespace st {
 						//auto center = view.getCenter();
 						//FIXME: Scrolling
 						//view.setCenter(win.mapPixelToCoords({(s.x), (s.y)}));
-						view.setCenter(sf::Vector2f { static_cast<float>(s.x), static_cast<float>(s.y) });
-						if (s.delta < 0 && zoomfactor < 5.0f) {
-							zoomfactor *= 1.5;
-							view.zoom(1.5);
+						//view.setCenter(sf::Vector2f { static_cast<float>(s.x), static_cast<float>(s.y) });
+						if (s.delta < 0 && zoomfactor < 2.0f) {
+							zoomfactor += 0.3f;
+							view.zoom(1.3f);
 						} else if (s.delta > 0 && zoomfactor > 0.125f) {
-							zoomfactor *= 0.5;
-							view.zoom(0.5);
+							zoomfactor -= 0.3f;
+							view.zoom(1/1.3f);
 						}
 						//Reset the center
 						//view.setCenter(center);
@@ -376,6 +376,7 @@ namespace st {
 		static std::string msg1;
 		Node& n = *project.active;
 		if (ImGui::Begin("Property Editor", &window_states["property"])) {
+			ImGui::InputFloat("Zoomlevel", &zoomfactor, .0f, .0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
 			if (!project.hasActiveNode()) {
 				ImGui::Text("No Node selected.");
 				goto end;

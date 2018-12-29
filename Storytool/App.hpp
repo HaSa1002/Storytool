@@ -58,6 +58,7 @@ namespace st {
 	sf::RenderWindow win;
 	sf::Clock clock;
 	sf::Font font;
+	
 
 	//Doubleclick detection
 	sf::Time doubleClickTime;
