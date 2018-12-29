@@ -38,7 +38,7 @@ namespace st {
 
 	}
 
-	void Connection::draw(sf::RenderTarget & target, sf::RenderStates) const {
-		target.draw(line);
+	void Connection::draw(sf::RenderTarget & target, sf::RenderStates states) const {
+		target.draw(line, states);
 	}
 }

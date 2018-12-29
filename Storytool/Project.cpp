@@ -6,6 +6,20 @@ namespace st {
 	}
 
 
+	std::string Project::getTitle() {
+		std::string res = name;
+		if (current_graph == nullptr)
+			return res;
+		res += " (" + current_graph->id + ")";
+		if (active == nullptr)
+			return res;
+		res += " ["+ active->id + "]";
+		if (!is_modified)
+			return res;
+		res += '*';
+		return res;
+	}
+
 	const std::string Project::proposeStorylineID() {
 
 		std::string res = storyline_id_template;
@@ -47,6 +61,19 @@ namespace st {
 	void Project::addStoryline(const std::string & text, const std::string & id) {
 		storyline.insert_or_assign(id, text);
 		++storyline_counter;
+	}
+
+	void Project::addGraph(const std::string & id, const std::string & headline, const std::string & description) {
+		graphs[id] = Graph(id, headline, description, font);
+	}
+
+	bool Project::existGraph(const std::string& id) {
+		return graphs.find(id) != graphs.end();
+	}
+
+	void Project::changeGraph(const std::string & id) { 
+		current_graph = &graphs[id];
+		active = nullptr;
 	}
 
 	xmlData st::Project::save() {
@@ -103,8 +130,7 @@ namespace st {
 	}
 
 	void Project::draw(sf::RenderTarget & target, sf::RenderStates states) const {
-		for (auto& graph : graphs)
-			graph.second.draw(target, states, graphs);
+		current_graph->draw(target, states, graphs);
 	}
 
 	void Project::update() {

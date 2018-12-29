@@ -19,6 +19,9 @@ namespace st {
 		std::vector<Character> characters;
 		GlobalVars global_vars;
 		sf::Font* font;
+		bool is_modified = false;
+
+		std::string getTitle();
 
 		//Storyline
 		//FIXME: Add counter var, add addStoryline(id, text) method;
@@ -29,8 +32,11 @@ namespace st {
 		void addStoryline(const std::string& text);
 		void addStoryline(const std::string& text, const std::string& id);
 
-
+		//Graphs
 		id main_graph;
+		void addGraph(const std::string& id, const std::string& headline, const std::string& description);
+		bool existGraph(const std::string & id);
+		void changeGraph(const std::string& id);
 
 		//Save and load
 		xmlData save();

@@ -8,6 +8,7 @@
 #include <SFML/Config.hpp>
 
 namespace st {
+	const std::string VERSION{"1.0-DEV" };
 	class App {
 	public:
 		App();
@@ -22,6 +23,7 @@ namespace st {
 		void drawNodeCollection();
 		void drawPropertyEditor();
 		void drawRightClickMenu();
+		void drawGraphOverview();
 		void draw();
 		void mainMenuBar();
 
@@ -34,7 +36,7 @@ namespace st {
 		{"property", true },
 		{"storyline", false },
 		{"globalvars", false },
-		{"graphoverview", false },
+		{"graphoverview", true },
 		{"nodecollection", true },
 		{"right-click-menu", false }
 	};

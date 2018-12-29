@@ -210,6 +210,7 @@ namespace st {
 	}
 	void App::update() {
 		project.update();
+		win.setTitle("Storytool v" + VERSION + " | " + project.getTitle());
 		ImGui::SFML::Update(win, clock.restart());
 		mainMenuBar();
 		draw();
@@ -485,6 +486,30 @@ namespace st {
 		ImGui::End();
 	}
 
+	void App::drawGraphOverview() {
+		static std::string id;
+		static std::string headline;
+		static std::string description;
+		if (ImGui::Begin("Graph Overview", &window_states["graphoverview"])) {
+			ImGui::InputText("ID", &id);
+			ImGui::InputText("Headline", &headline);
+			ImGui::InputTextMultiline("Description", &description);
+
+			if (!id.empty() && !project.existGraph(id) && ImGui::Button("Add Graph")) {
+				project.addGraph(id, headline, description);
+				id.clear();
+				//We leave the rest
+			}
+			ImGui::Separator();
+			for (auto g : project.graphs) {
+				if (ImGui::Selectable(g.first.data())) {
+					project.changeGraph(g.first);
+				}
+			}
+		}
+		ImGui::End();
+	}
+
 	void App::draw() {
 		if (window_states["globalvars"]) drawGlobalsWindow();
 		if (window_states["property"]) drawPropertyEditor();
@@ -492,7 +517,7 @@ namespace st {
 		if (window_states["nodecollection"]) drawNodeCollection();
 		if (window_states["character"]) drawCharacterWindow();
 		if (window_states["storyline"]) drawStorylineWindow();
-
+		if (window_states["graphoverview"]) drawGraphOverview();
 
 	}
 
@@ -573,7 +598,7 @@ namespace st {
 
 				ImGui::Separator();
 				if (ImGui::MenuItem("Graph Overview")) {
-
+					window_states["graphoverview"] = !window_states["graphoverview"];
 				}
 				if (ImGui::MenuItem("Global Variables")) {
 					window_states["globalvars"] = !window_states["globalvars"];

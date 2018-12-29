@@ -49,7 +49,7 @@ namespace st {
 			try {
 				const Graph& sg = graphs.at(g.first);
 				sg.draw(target, current, graphs);
-				target.draw(sg.headline);
+				target.draw(sg.headline, current);
 			} catch (std::out_of_range) {
 				//Graph doesn't exists
 				target.draw(sf::Text { "Graph \"" + g.first + "\" doesn't exists!", *font }, current);
@@ -60,7 +60,7 @@ namespace st {
 			target.draw(i, states);
 		}
 
-		//Draw headline
+		
 	}
 	void Graph::addNode(const Node * node) {
 		Node n = *node;
