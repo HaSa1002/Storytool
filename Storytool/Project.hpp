@@ -37,6 +37,7 @@ namespace st {
 		void addGraph(const std::string& id, const std::string& headline, const std::string& description);
 		bool existGraph(const std::string & id);
 		void changeGraph(const std::string& id);
+		bool isValidSubgraph(const std::string& id);
 
 		//Save and load
 		xmlData save();

@@ -76,6 +76,14 @@ namespace st {
 		active = nullptr;
 	}
 
+	//Subgraph != Graph
+	//Graph exists //Possibly not important
+	//Graph != Subgraph of Graph
+	bool Project::isValidSubgraph(const std::string & id) {
+		return id != current_graph->id && existGraph(id)
+		&& !graphs[id].hasSubgraph(current_graph->id);
+	}
+
 	xmlData st::Project::save() {
 		xmlData result { "project",
 			{{"name", name }}, "", {

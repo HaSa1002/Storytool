@@ -31,6 +31,6 @@ namespace st {
 		void deleteNode(const std::string& id);
 		void addConnection(const std::string& start, const std::string& end);
 
-
+		bool hasSubgraph(const std::string& id);
 	};
 }

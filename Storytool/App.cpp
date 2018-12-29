@@ -208,6 +208,8 @@ namespace st {
 		//Add to double click time
 		last_click += clock.getElapsedTime();
 	}
+
+
 	void App::update() {
 		project.update();
 		win.setTitle("Storytool v" + VERSION + " | " + project.getTitle());
@@ -375,6 +377,8 @@ namespace st {
 		static std::string msg;
 		static sf::Color res_color1;
 		static std::string msg1;
+		static std::string sub_graph;
+		static sf::Vector2f sub_pos;
 		Node& n = *project.active;
 		if (ImGui::Begin("Property Editor", &window_states["property"])) {
 			ImGui::InputFloat("Zoomlevel", &zoomfactor, .0f, .0f, "%.3f", ImGuiInputTextFlags_ReadOnly);
@@ -464,6 +468,25 @@ namespace st {
 	end:
 		if (ImGui::CollapsingHeader("Graph")) {
 
+			ImGui::Separator();
+			ImGui::Separator();
+			ImGui::Text("Subgraphs");
+			ImGui::InputText("Graph ID", &sub_graph);
+			ImVec2 vec = sub_pos;
+			if (ImGui::InputFloat2("Position (x,y)", (float*)&vec, "%.0f")) {
+				sub_pos = vec;
+			}
+			if (project.isValidSubgraph(sub_graph) && ImGui::Button("Add Subgraph")) {
+				project.current_graph->sub_graphs.push_back({sub_graph, sub_pos });
+				sub_graph.clear();
+				sub_pos *= 0.f; //Cheating...
+			}
+			ImGui::Separator();
+			for (auto i : project.current_graph->sub_graphs) {
+				if (ImGui::Selectable(i.first.data())) {
+					project.changeGraph(i.first);
+				}
+			}
 		}
 		ImGui::End();
 	}

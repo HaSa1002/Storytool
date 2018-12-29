@@ -77,4 +77,11 @@ namespace st {
 		}
 		connections.push_back({ nodes[start], nodes[end] });
 	}
+
+	//FIXME: IS SLOW
+	bool Graph::hasSubgraph(const std::string & id) {
+		for (auto i : sub_graphs)
+			if (i.first == id) return true;
+		return false;
+	}
 }
