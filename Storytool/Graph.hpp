@@ -11,7 +11,7 @@ namespace st {
 	struct Graph {
 		Graph() = default;
 		Graph(const std::string& id, const std::string& headline, const std::string& description, sf::Font* font);
-		
+
 		Graph(sf::Font* font);
 		std::string id;
 		sf::Text headline;

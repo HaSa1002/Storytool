@@ -8,7 +8,9 @@ namespace st {
 	struct Project : public sf::Drawable {
 		Project(sf::Font* font) :name { "Untitled Project" }, font { font } {
 			graphs["main"] = Graph{ "main", "", "The main Graph in the project.", font };
+			graphs["Test"] = Graph{ "Test", "Test Graph", "", font };
 			current_graph = &graphs["main"];
+			current_graph->sub_graphs.push_back({"Test", {100, 100 } });
 		};
 		Project(const std::string& path, sf::Font* font);
 		std::string name;
