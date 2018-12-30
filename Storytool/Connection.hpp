@@ -5,6 +5,7 @@
 namespace st {
 	struct Connection : sf::Drawable {
 		Connection(Node& s, Node& e);
+		Connection(const std::string& s, const std::string& e);
 		std::string s_n;
 		std::string e_n;
 		sf::Vector2f start;

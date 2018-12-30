@@ -7,6 +7,7 @@ namespace st {
 		e_n = e.id;
 		update(s, e);
 	}
+	Connection::Connection(const std::string & s, const std::string & e) :s_n { s }, e_n { e } { }
 	bool Connection::is(const std::string & start, const std::string & end) {
 		return start == s_n && end == e_n;
 	}
@@ -17,9 +18,9 @@ namespace st {
 		if (s == start && e == end) return; //No update required
 		auto s_b = n_start.shape.getGlobalBounds();
 		auto e_b = n_end.shape.getGlobalBounds();
-		s += { s_b.width/2, s_b.height};
-		e += { e_b.width/2, 0};
-		
+		s += { s_b.width / 2, s_b.height};
+		e += { e_b.width / 2, 0};
+
 		start = s;
 		end = e;
 		//Start
