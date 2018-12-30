@@ -28,14 +28,14 @@
     <Filter Include="Headerdateien\nodes">
       <UniqueIdentifier>{fe892302-7b80-49f0-bc49-3b3f2f36e880}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headerdateien\actions">
-      <UniqueIdentifier>{b07b1316-b12b-4205-8227-e53955e2690a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headerdateien\character">
       <UniqueIdentifier>{84813e0c-585c-4999-acaf-616e2bf89cbb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headerdateien\ST Script">
       <UniqueIdentifier>{21a4fdc2-9ef9-40bf-95e4-6182011bb780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\XML">
+      <UniqueIdentifier>{b07b1316-b12b-4205-8227-e53955e2690a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +76,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Connection.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialize.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Deserialize.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,5 +140,16 @@
     <ClInclude Include="Connection.hpp">
       <Filter>Headerdateien\graph</Filter>
     </ClInclude>
+    <ClInclude Include="Deserialize.hpp">
+      <Filter>Headerdateien\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialize.hpp">
+      <Filter>Headerdateien\XML</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Serialize.inl">
+      <Filter>Headerdateien\XML</Filter>
+    </None>
   </ItemGroup>
 </Project>

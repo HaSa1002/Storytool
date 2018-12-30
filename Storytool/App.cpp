@@ -212,7 +212,7 @@ namespace st {
 
 	void App::update() {
 		project.update();
-		win.setTitle("Storytool v" + VERSION + " | " + project.getTitle());
+		win.setTitle("Storytool v" + std::string{VERSION} + " | " + project.getTitle());
 		ImGui::SFML::Update(win, clock.restart());
 		mainMenuBar();
 		draw();
@@ -344,13 +344,13 @@ namespace st {
 				}
 
 				if (ImGui::Button("Add##insert")) {
-					project.def_nodes.insert_or_assign(name, Node { name, character, d_text, font, bg_color, t_color, i_a, a_e });
+					project.node_set.insert_or_assign(name, Node { name, character, d_text, font, bg_color, t_color, i_a, a_e });
 
 				}
 			}
 
 			if (ImGui::CollapsingHeader("Collection")) {
-				for (auto& i : project.def_nodes) {
+				for (auto& i : project.node_set) {
 					Node& n = i.second;
 					ImGui::PushStyleColor(ImGuiCol_Button, n.shape.getFillColor());
 					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, n.shape.getFillColor());
@@ -552,10 +552,29 @@ namespace st {
 
 				}
 				if (ImGui::MenuItem("Open")) {
+					af::XML xml;
+					xml.open("test.story");
+					project = Deserialize::Project(xml.read(), &font);
+					//Fix pointer
+					project.font = &font;
+					for (auto& i : project.graphs) {
+						i.second.font = &font;
+						i.second.headline.setFont(font);
+						for (auto& j : i.second.nodes) {
+							j.second.rendered_name.setFont(font);
+							j.second.correctTransforms();
+						}
+					}
+					for (auto& i : project.node_set) {
+						i.second.rendered_name.setFont(font);
+					}
 
+					project.changeGraph("main");
 				}
 				if (ImGui::MenuItem("Save")) {
-
+					af::XML xml;
+					xml.open("test.story");
+					xml.write(Serialize::Project(project));
 				}
 				if (ImGui::MenuItem("Save as")) {
 

@@ -1,5 +1,7 @@
 #pragma once
 #include "Project.hpp"
+#include "Serialize.hpp"
+#include "Deserialize.hpp"
 
 #include "imgui.h"
 #include "imgui-SFML.h"
@@ -8,7 +10,7 @@
 #include <SFML/Config.hpp>
 
 namespace st {
-	const std::string VERSION{"1.0-DEV" };
+	
 	class App {
 	public:
 		App();

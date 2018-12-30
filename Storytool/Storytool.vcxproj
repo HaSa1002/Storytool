@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -99,7 +99,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Software\SFML-2.5.1\include;D:\Software\KBI\libs\include\AF;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Software\SFML-2.5.1\include;D:\Software\KBI\libs\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Connection.cpp" />
+    <ClCompile Include="Deserialize.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />
@@ -136,12 +137,14 @@
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Project.cpp" />
+    <ClCompile Include="Serialize.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.hpp" />
     <ClInclude Include="Character.hpp" />
     <ClInclude Include="Config.hpp" />
     <ClInclude Include="Connection.hpp" />
+    <ClInclude Include="Deserialize.hpp" />
     <ClInclude Include="Graph.hpp" />
     <ClInclude Include="Parser.hpp" />
     <ClInclude Include="Project.hpp" />
@@ -155,7 +158,11 @@
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="Node.hpp" />
+    <ClInclude Include="Serialize.hpp" />
     <ClInclude Include="SfmlHelper.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Serialize.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
