@@ -8,16 +8,19 @@ namespace st {
 	struct Project : public sf::Drawable {
 		Project(sf::Font* font) :name { "Untitled Project" }, font { font } {
 			graphs["main"] = Graph{ "main", "", "The main Graph in the project.", font };
-			graphs["Test"] = Graph{ "Test", "Test Graph", "", font };
 			current_graph = &graphs["main"];
-			current_graph->sub_graphs.push_back({"Test", {100, 100 } });
 		};
 		Project(const std::string& path, sf::Font* font);
+
+
 		std::string name;
-		std::unordered_map<id, Node> def_nodes;
-		std::unordered_map<id, Graph> graphs;
+		id main_graph;
 		std::vector<Character> characters;
+		std::string storyline_id_template = "C-I";
+		std::unordered_map<id, std::string> storyline;
 		GlobalVars global_vars;
+		std::unordered_map<id, Node> node_set;
+		std::unordered_map<id, Graph> graphs;
 		sf::Font* font;
 		bool is_modified = false;
 
@@ -25,15 +28,12 @@ namespace st {
 
 		//Storyline
 		//FIXME: Add counter var, add addStoryline(id, text) method;
-		std::unordered_map<id, std::string> storyline;
-		std::string storyline_id_template = "C-I";
 		size_t storyline_counter = 0;
 		const std::string proposeStorylineID();
 		void addStoryline(const std::string& text);
 		void addStoryline(const std::string& text, const std::string& id);
 
 		//Graphs
-		id main_graph;
 		void addGraph(const std::string& id, const std::string& headline, const std::string& description);
 		bool existGraph(const std::string & id);
 		void changeGraph(const std::string& id);
