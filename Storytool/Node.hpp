@@ -41,7 +41,7 @@ namespace st {
 		void setDisplayString(const std::string& string); //sets the displayed string and calls correctTransforms
 		bool isHovered(const sf::Vector2f& mouse_pos);
 		void checkSTS(GlobalVars& globals);
-		sf::Vector2f getPosition();
+		sf::Vector2f getPosition() const;
 
 	};
 }

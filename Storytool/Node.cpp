@@ -40,7 +40,7 @@ void st::Node::checkSTS(GlobalVars& globals) {
 	script::run(after_execute, globals);
 }
 
-sf::Vector2f st::Node::getPosition() {
+sf::Vector2f st::Node::getPosition() const {
 	auto bounds = rendered_name.getGlobalBounds();
 	sf::extrude<float>(bounds, offset);
 	return sf::Vector2f(bounds.left, bounds.top);
