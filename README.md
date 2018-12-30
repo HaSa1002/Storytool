@@ -28,7 +28,7 @@ This project is currently under development and the list below may change during
 3. Saving
 4. Workflow Optimisations
 
-## To be improved (Done first stage)
+## Working (Can be improved)
 1. Storylines (You can write the script)
 2. Tree View (Flowchart)
 3. Nodes
