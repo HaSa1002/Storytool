@@ -5,6 +5,9 @@
 #include "imgui_stdlib.h"
 #include <iostream>
 
+#include <filesystem>
+
+
 namespace st {
 
 
@@ -212,7 +215,7 @@ namespace st {
 
 	void App::update() {
 		project.update();
-		win.setTitle("Storytool v" + std::string{VERSION} + " | " + project.getTitle());
+		win.setTitle("Storytool v" + std::string { VERSION } +" | " + project.getTitle());
 		ImGui::SFML::Update(win, clock.restart());
 		mainMenuBar();
 		draw();
@@ -477,7 +480,7 @@ namespace st {
 				sub_pos = vec;
 			}
 			if (project.isValidSubgraph(sub_graph) && ImGui::Button("Add Subgraph")) {
-				project.current_graph->sub_graphs.push_back({sub_graph, sub_pos });
+				project.current_graph->sub_graphs.push_back({ sub_graph, sub_pos });
 				sub_graph.clear();
 				sub_pos *= 0.f; //Cheating...
 			}
@@ -533,6 +536,84 @@ namespace st {
 		ImGui::End();
 	}
 
+	const std::string App::iterateDirectory(std::filesystem::path p) {
+		for (auto& i : std::filesystem::directory_iterator { p }) {
+			if (i.is_directory()) {
+				if (ImGui::TreeNode(i.path().filename().string().data())) {
+					std::string t = iterateDirectory(i);
+					ImGui::TreePop();
+					if (!t.empty()) return t;
+				}
+			}
+
+			if (i.is_regular_file()) {
+				if (ImGui::Selectable(i.path().filename().string().data())) {
+					return i.path().string();
+				}
+			}
+		}
+		return "";
+	}
+
+	void App::drawOpenWindow() {
+	static std::string file;
+		if (ImGui::Begin("Open", &window_states["open"])) {
+			ImGui::InputText("Open##it", &file);
+			ImGui::SameLine();
+			if (ImGui::Button("Open File")) {
+				try {
+					load(file);
+					window_states["open"] = false;
+				} catch (std::invalid_argument e) {
+					std::cerr << e.what();
+				}
+			}
+			try {
+				ImGui::BeginChild("Open##select");
+				ImGui::TreePush(path.string().data());
+				std::string t {iterateDirectory(path)};
+				if (!t.empty()) file = t;
+				ImGui::TreePop();
+				ImGui::EndChild();
+				
+			} catch (std::filesystem::filesystem_error e) {
+				std::cerr << e.what();
+			}
+
+		}
+
+		ImGui::End();
+	}
+	void App::drawSaveWindow() {
+		static std::string file;
+		if (ImGui::Begin("Save as...", &window_states["save"])) {
+			ImGui::InputText("Save##it", &file);
+			ImGui::SameLine();
+			if (ImGui::Button("Save File")) {
+				try {
+					save(file);
+					current_path = file;
+					window_states["save"] = false;
+				} catch (std::invalid_argument e) {
+					std::cerr << e.what();
+				}
+			}
+			try {
+				ImGui::BeginChild("Save##select");
+				ImGui::TreePush(path.string().data());
+				std::string t { iterateDirectory(path) };
+				if (!t.empty()) file = t;
+				ImGui::TreePop();
+				ImGui::EndChild();
+			} catch (std::filesystem::filesystem_error e) {
+				std::cerr << e.what();
+			}
+
+		}
+
+		ImGui::End();
+	}
+
 	void App::draw() {
 		if (window_states["globalvars"]) drawGlobalsWindow();
 		if (window_states["property"]) drawPropertyEditor();
@@ -541,7 +622,42 @@ namespace st {
 		if (window_states["character"]) drawCharacterWindow();
 		if (window_states["storyline"]) drawStorylineWindow();
 		if (window_states["graphoverview"]) drawGraphOverview();
+		if (window_states["open"]) drawOpenWindow();
+		if (window_states["save"]) drawSaveWindow();
 
+
+	}
+
+	void App::save(const std::string& file) {
+		af::XML xml;
+		if (!std::filesystem::exists(file)) {
+			xml.create(file);
+			xml.close();
+		}
+		xml.open(file);
+		xml.write(Serialize::Project(project));
+	}
+
+	void App::load(const std::string& file) {
+		af::XML xml;
+		xml.open(file);
+		project = Deserialize::Project(xml.read(), &font);
+		//Fix pointer
+		project.font = &font;
+		for (auto& i : project.graphs) {
+			i.second.font = &font;
+			i.second.headline.setFont(font);
+			for (auto& j : i.second.nodes) {
+				j.second.rendered_name.setFont(font);
+				j.second.correctTransforms();
+			}
+		}
+		for (auto& i : project.node_set) {
+			i.second.rendered_name.setFont(font);
+		}
+
+		project.changeGraph(project.main_graph);
+		current_path = file;
 	}
 
 	void App::mainMenuBar() {
@@ -549,35 +665,18 @@ namespace st {
 
 			if (ImGui::BeginMenu("File")) {
 				if (ImGui::MenuItem("New")) {
-
+					project = Project { &font };
 				}
 				if (ImGui::MenuItem("Open")) {
-					af::XML xml;
-					xml.open("test.story");
-					project = Deserialize::Project(xml.read(), &font);
-					//Fix pointer
-					project.font = &font;
-					for (auto& i : project.graphs) {
-						i.second.font = &font;
-						i.second.headline.setFont(font);
-						for (auto& j : i.second.nodes) {
-							j.second.rendered_name.setFont(font);
-							j.second.correctTransforms();
-						}
-					}
-					for (auto& i : project.node_set) {
-						i.second.rendered_name.setFont(font);
-					}
+					window_states["open"] = !window_states["open"];
 
-					project.changeGraph("main");
 				}
 				if (ImGui::MenuItem("Save")) {
-					af::XML xml;
-					xml.open("test.story");
-					xml.write(Serialize::Project(project));
+					if (current_path.empty()) window_states["save"] = true;
+					else save(current_path);
 				}
 				if (ImGui::MenuItem("Save as")) {
-
+					window_states["save"] = !window_states["save"];
 				}
 				ImGui::Separator();
 				if (ImGui::MenuItem("Import")) {

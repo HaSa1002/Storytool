@@ -9,6 +9,7 @@ namespace st {
 		Project(sf::Font* font) :name { "Untitled Project" }, font { font } {
 			graphs["main"] = Graph{ "main", "", "The main Graph in the project.", font };
 			current_graph = &graphs["main"];
+			main_graph = "main";
 		};
 		Project(const std::string& path, sf::Font* font);
 
