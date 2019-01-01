@@ -14,7 +14,7 @@ This project is currently under development and the list below may change during
 
 # Features #
 
-**Last Update: 30.12.2018**
+**Last Update: 01.01.2019**
 
 ## Planned Features
 1. Export Graphs to PNG and HTML/MD/TXT (real script)
@@ -23,10 +23,8 @@ This project is currently under development and the list below may change during
 4. Contextual Right click menu
 
 ## In Progress
-1. Save As Explorer
-2. Open Explorer
-3. Saving
-4. Workflow Optimisations
+1. Workflow Optimisations
+2. Bugfixes
 
 ## Working (Can be improved)
 1. Storylines (You can write the script)
@@ -44,5 +42,7 @@ This project is currently under development and the list below may change during
 13. Input Handling (Selecting of Nodes, moving, etc..)
 14. Global Variables Window
 15. Property Editor
-
+16. Save As Explorer
+17. Open Explorer
+18. Saving
 
